@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+if 'BIMANALYTICS_CONFIG_DIR' in os.environ:
+    CONFIG_DIR = os.environ.get('BIMANALYTICS_CONFIG_DIR')
+else:
+    CONFIG_DIR = os.path.join(os.path.dirname(BASE_DIR), 'bimanalytics-config')
 
 
 # Quick-start development settings - unsuitable for production
@@ -52,6 +56,8 @@ MIDDLEWARE_CLASSES = (
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
     'PAGINATE_BY': 10,
+    'PAGINATE_BY_PARAM': 'page_size',
+    'MAX_PAGINATE_BY': 100,
 }
 
 ROOT_URLCONF = 'bimanalytics.urls'
@@ -87,3 +93,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+
+# Things that need to be in 'local_settings':
+#     - SECRET_KEY
+#     - AWS_CREDENTIALS
+from local_settings import *  # noqa # pylint: disable=wildcard-import, import-error
