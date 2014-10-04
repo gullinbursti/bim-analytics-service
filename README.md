@@ -1,4 +1,4 @@
-# bim-analytic-service!!!
+# bim-analytics-service!!!
 
 ## Developing
 
@@ -7,8 +7,8 @@
 Quick and dirty way to get set up:
 
 ```
-$ git clone git@github.com:BuiltInMenlo/bim-analytic-service.git
-$ cd bim-analytic-service
+$ git clone git@github.com:BuiltInMenlo/bim-analytics-service.git
+$ cd bim-analytics-service
 $ virtualenv --python python2.7 .virtualenv
 $ source .virtualenv/bin/activate
 $ pip install -r requirements.txt
@@ -57,7 +57,7 @@ In order to help `pylint` find its configuration file, make sure to set
 `PYLINTRC` before starting `vim`:
 
 ```
-$ export PYLINTRC=~/dev/src-bim/bim-analytic-service/pylintrc
+$ export PYLINTRC=~/dev/src-bim/bim-analytics-service/pylintrc
 ```
 
 

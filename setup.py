@@ -2,7 +2,7 @@ from os import path
 from setuptools import setup
 
 setup(
-    name='bim-analytic-service',
+    name='bimanalytics',
     # Please read the following for setting the version number:
     #    - https://pythonhosted.org/setuptools/setuptools.html#specifying-your-project-s-version  # noqa
     version='0.0.0-dev',
