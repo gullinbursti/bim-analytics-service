@@ -19,20 +19,12 @@ else:
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '_lz(4tb@gy0%cv$*3ws8c@!cf%%w&xvd*xokq%n$)i))np(to('
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-TEMPLATE_DEBUG = True
-
+DEBUG = False
+TEMPLATE_DEBUG = False
 ALLOWED_HOSTS = []
 
 
 # Application definition
-
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -61,8 +53,7 @@ REST_FRAMEWORK = {
 }
 
 ROOT_URLCONF = 'bimanalytics.urls'
-
-WSGI_APPLICATION = 'bimanalytics.wsgi.application'
+WSGI_APPLICATION = 'bimanalytics.wsgi.APPLICATION'
 
 
 # Database
@@ -70,31 +61,31 @@ WSGI_APPLICATION = 'bimanalytics.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {
+            'read_default_file': os.path.join(CONFIG_DIR, 'mysql-django.cnf'),
+            'init_command': 'SET storage_engine=INNODB',
+        },
     }
 }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
-
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
+# Celery configuration
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
 
 # Things that need to be in 'local_settings':
 #     - SECRET_KEY
