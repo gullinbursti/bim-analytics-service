@@ -1,3 +1,5 @@
+"""This module contains the REST endpoints/views for Selfieclub."""
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -5,8 +7,12 @@ from selfieclub.serializers import UserSerializer
 
 
 class EventView(APIView):
+
+    """Event view."""
+
     # pylint: disable=too-many-public-methods
     def post(self, request, format=None):  # pylint: disable=redefined-builtin
+        """Process incoming event that has been POSTed."""
         # noqa pylint: disable=unexpected-keyword-arg, no-value-for-parameter, no-member
         request_serializer = UserSerializer(data=request.DATA)
         if not request_serializer.is_valid():

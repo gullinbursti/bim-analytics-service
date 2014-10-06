@@ -1,0 +1,1 @@
+"""BIM analytics service project."""

@@ -1,3 +1,5 @@
+"""Unit tests for the Selfieclub event endpoint serializers."""
+
 import json
 from selfieclub.serializers import UserSerializer
 
@@ -6,7 +8,11 @@ class TestUserSerializer(object):
     # pylint: disable=too-few-public-methods, no-self-use
     # pylint: disable=no-value-for-parameter, no-member
     # pylint: disable=unexpected-keyword-arg
+
+    """Testing the UserSerializer."""
+
     def test_loading_good_json(self):
+        """Test that loading good data works."""
         data = json.loads(USER_GOOD_JSON)
         user = UserSerializer(data=data)
         assert user.is_valid()

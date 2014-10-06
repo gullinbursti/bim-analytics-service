@@ -1,3 +1,5 @@
+"""Selfieclub endpoint URL information for Django."""
+
 from django.conf.urls import patterns, url
 from selfieclub import views
 from rest_framework.urlpatterns import format_suffix_patterns

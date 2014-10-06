@@ -1,4 +1,7 @@
+"""Setup script for the BIM Analytics Service."""
+
 from setuptools import setup
+
 
 setup(
     name='bimanalytics',

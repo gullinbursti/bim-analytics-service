@@ -1,8 +1,13 @@
+"""Selfieclub event serializers."""
+
 from rest_framework import serializers
 
 
 class UserSerializer(serializers.Serializer):
     # pylint: disable=too-few-public-methods
+
+    """User information serializer."""
+
     # User ID
     id = serializers.CharField(  # pylint: disable=invalid-name
         required=True,
