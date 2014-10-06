@@ -1,7 +1,7 @@
 """Unit tests for the Selfieclub event endpoint serializers."""
 
 from __future__ import absolute_import
-from StringIO import StringIO
+from io import StringIO
 from rest_framework.parsers import JSONParser
 from selfieclub.serializers import UserSerializer
 
@@ -27,7 +27,7 @@ class TestUserDeserialization(object):
         assert data_dict['id'] == user_dto.id_
 
 
-USER_GOOD_JSON = """
+USER_GOOD_JSON = u"""
 {
    "cohort_date" : "2014-10-05",
    "cohort_week" : "2014-32",
