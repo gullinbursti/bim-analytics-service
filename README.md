@@ -47,7 +47,6 @@ Add the following to you `~/.vimrc` file:
 
 ```
 let g:syntastic_python_checkers = ['python', 'flake8', 'pylint', 'py3kwarn', 'pep257']
-let g:syntastic_python_pep257_args="--ignore D100,D101,D102,D103"
 let g:syntastic_python_py3kwarn_args="--nofix=urllib"
 ```
 
