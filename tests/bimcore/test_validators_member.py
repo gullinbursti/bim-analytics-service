@@ -14,3 +14,11 @@ def test_bad_values_for_validate_member_id(bad_value):
     """Test errors on all bad member ID values."""
     with pytest.raises(ValidationError):
         mem_validators.validate_member_id(bad_value)
+
+
+@pytest.mark.parametrize(
+    'good_value',
+    testvalues.MemberIdTestValues().good_values)
+def test_good_values_for_validate_member_id(good_value):
+    """Test errors on all bad member ID values."""
+    mem_validators.validate_member_id(good_value)
