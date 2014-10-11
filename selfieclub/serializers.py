@@ -3,19 +3,19 @@
 from __future__ import absolute_import
 from . import dtos
 from rest_framework import serializers
-from bimcore.validators import validate_user_id
+from bimcore.validators import validate_member_id
 
 
-class UserSerializer(serializers.Serializer):
+class MemberSerializer(serializers.Serializer):
     # pylint: disable=no-self-use
 
-    """User information serializer."""
+    """member information serializer."""
 
-    # User ID
+    # member ID
     id = serializers.IntegerField(  # pylint: disable=invalid-name
         required=True,
         )
-    # User name
+    # member name
     name = serializers.CharField(
         required=True,
         )
@@ -31,13 +31,13 @@ class UserSerializer(serializers.Serializer):
     def restore_object(self, attrs, instance=None):
         """Given a dictionary of deserialized field values."""
         assert instance is None, 'Cannot be used to update, only to create'
-        return dtos.UserDto(
+        return dtos.MemberDto(
             attrs['id'],
             attrs['name'],
             attrs['cohort_date'],
             attrs['cohort_week'])
 
     def validate_id(self, attrs, source):
-        """User ID validation call."""
-        validate_user_id(attrs[source])
+        """member ID validation call."""
+        validate_member_id(attrs[source])
         return attrs

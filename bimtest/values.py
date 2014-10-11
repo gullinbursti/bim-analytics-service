@@ -29,9 +29,9 @@ class FieldTestValues(object):
         return self.all_bad_values[0]
 
 
-class UserIdTestValues(FieldTestValues):
+class MemberIdTestValues(FieldTestValues):
 
-    """Contains test values for user IDs."""
+    """Contains test values for member IDs."""
 
     all_good_values = (
         92837492,)
@@ -40,9 +40,9 @@ class UserIdTestValues(FieldTestValues):
         -1,)
 
 
-class UserNameTestValues(FieldTestValues):
+class MemberNameTestValues(FieldTestValues):
 
-    """Contains test values for user names."""
+    """Contains test values for member names."""
 
     all_good_values = (
         'jerry',)

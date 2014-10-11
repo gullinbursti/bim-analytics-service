@@ -6,7 +6,7 @@ from __future__ import absolute_import
 from django.core.validators import validate_integer, MinValueValidator
 
 
-def validate_user_id(value):
-    """Validate that we have a valid user ID."""
+def validate_member_id(value):
+    """Validate that we have a valid member ID."""
     validate_integer(value)
     (MinValueValidator(1))(value)
