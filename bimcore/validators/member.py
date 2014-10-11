@@ -54,3 +54,11 @@ def validate_cohort_week(value):
     """Validate that we have a valid member cohort week."""
     # ALWAYS check length first to minimize DOS attacks, after null check
     validate_not_none(value)
+    # TODO: Seriously add a regex!!!
+    (ExactLengthValidator(7))(value)
+    try:
+        datetime.strptime(value, r'%Y-%W').date()
+    except ValueError:
+        raise ValidationError(
+            'Does not match expected format of \'YYYY-WW\', '
+            'or values could be out of range.')

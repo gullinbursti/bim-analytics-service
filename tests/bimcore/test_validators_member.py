@@ -56,3 +56,20 @@ def test_bad_values_for_validate_cohort_date(bad_value):
 def test_good_values_for_validate_cohort_date(good_value):
     """Test errors on all bad member ID values."""
     mem_validators.validate_cohort_date(good_value)
+
+
+@pytest.mark.parametrize(
+    'bad_value',
+    testvalues.CohortWeekTestValues().bad_values)
+def test_bad_values_for_validate_cohort_week(bad_value):
+    """Test errors on all bad cohort week values."""
+    with pytest.raises(ValidationError):
+        mem_validators.validate_cohort_week(bad_value)
+
+
+@pytest.mark.parametrize(
+    'good_value',
+    testvalues.CohortWeekTestValues().good_values)
+def test_good_values_for_validate_cohort_week(good_value):
+    """Test errors on all good cohort week values."""
+    mem_validators.validate_cohort_week(good_value)

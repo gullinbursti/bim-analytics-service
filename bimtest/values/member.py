@@ -86,7 +86,17 @@ class CohortWeekTestValues(FieldTestValues):
     """Contains test values for cohort weeks."""
 
     all_good_values = (
-        '2014-43',)
+        '2014-43',
+        '0001-00',        # Minimum
+        '9999-53',        # Maximum
+        )
     all_bad_values = (
         None,
-        '',)
+        '',
+        '201443',
+        '0000-43',       # Year too low
+        '2014-54',       # Week too high
+        ' 2014-43',      # Padding
+        ' 2014-43 ',     # Padding
+        '2014-43 ',      # Padding
+        )
