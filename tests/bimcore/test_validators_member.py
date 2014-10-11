@@ -20,7 +20,7 @@ def test_bad_values_for_validate_member_id(bad_value):
     'good_value',
     testvalues.MemberIdTestValues().good_values)
 def test_good_values_for_validate_member_id(good_value):
-    """Test errors on all bad member ID values."""
+    """Test errors on all good member ID values."""
     mem_validators.validate_member_id(good_value)
 
 
@@ -28,7 +28,7 @@ def test_good_values_for_validate_member_id(good_value):
     'bad_value',
     testvalues.MemberNameTestValues().bad_values)
 def test_bad_values_for_validate_member_name(bad_value):
-    """Test errors on all bad member ID values."""
+    """Test errors on all bad member names values."""
     with pytest.raises(ValidationError):
         mem_validators.validate_member_name(bad_value)
 
@@ -37,7 +37,7 @@ def test_bad_values_for_validate_member_name(bad_value):
     'good_value',
     testvalues.MemberNameTestValues().good_values)
 def test_good_values_for_validate_member_name(good_value):
-    """Test errors on all bad member ID values."""
+    """Test errors on all good member names values."""
     mem_validators.validate_member_name(good_value)
 
 
@@ -45,7 +45,7 @@ def test_good_values_for_validate_member_name(good_value):
     'bad_value',
     testvalues.CohortDateTestValues().bad_values)
 def test_bad_values_for_validate_cohort_date(bad_value):
-    """Test errors on all bad member ID values."""
+    """Test errors on all bad cohort date values."""
     with pytest.raises(ValidationError):
         mem_validators.validate_cohort_date(bad_value)
 
@@ -54,7 +54,7 @@ def test_bad_values_for_validate_cohort_date(bad_value):
     'good_value',
     testvalues.CohortDateTestValues().good_values)
 def test_good_values_for_validate_cohort_date(good_value):
-    """Test errors on all bad member ID values."""
+    """Test errors on all good cohort date values."""
     mem_validators.validate_cohort_date(good_value)
 
 
