@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 from . import dtos
 from rest_framework import serializers
-from bimcore.validators import validate_member_id
+from bimcore.validators.member import validate_member_id
 
 
 class MemberSerializer(serializers.Serializer):

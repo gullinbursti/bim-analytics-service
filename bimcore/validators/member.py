@@ -1,4 +1,4 @@
-"""Common data/field validators used in BIM."""
+"""Common member data/field validators used in BIM."""
 
 from __future__ import absolute_import
 
