@@ -2,8 +2,11 @@
 
 from __future__ import absolute_import
 from . import dtos
-from rest_framework import serializers
+from bimcore.validators.member import validate_cohort_date
+from bimcore.validators.member import validate_cohort_week
+from bimcore.validators.member import validate_member_name
 from bimcore.validators.member import validate_member_id
+from rest_framework import serializers
 
 
 class MemberSerializer(serializers.Serializer):
@@ -40,4 +43,19 @@ class MemberSerializer(serializers.Serializer):
     def validate_id(self, attrs, source):
         """member ID validation call."""
         validate_member_id(attrs[source])
+        return attrs
+
+    def validate_name(self, attrs, source):
+        """member name validation call."""
+        validate_member_name(attrs[source])
+        return attrs
+
+    def validate_cohort_week(self, attrs, source):
+        """member cohort week validation call."""
+        validate_cohort_week(attrs[source])
+        return attrs
+
+    def validate_cohort_date(self, attrs, source):
+        """member cohort date validation call."""
+        validate_cohort_date(attrs[source])
         return attrs

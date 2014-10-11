@@ -34,7 +34,10 @@ class TestMemberDeserialization(object):
 
     @pytest.mark.parametrize(
         ('field_name', 'validator'),
-        [('id', 'selfieclub.serializers.validate_member_id')])
+        [('id', 'selfieclub.serializers.validate_member_id'),
+         ('name', 'selfieclub.serializers.validate_member_name'),
+         ('cohort_date', 'selfieclub.serializers.validate_cohort_date'),
+         ('cohort_week', 'selfieclub.serializers.validate_cohort_week')])
     def test_calls_validator(self, member_test_data, field_name, validator):
         """Make sure that the proper validator has been called.
 
@@ -46,8 +49,8 @@ class TestMemberDeserialization(object):
             serializer = MemberSerializer(data=member_test_data)
             assert not serializer.is_valid()
             assert serializer.errors
-            assert not set([field_name]) - set(serializer.errors.keys())
             patched.assert_called_with(member_test_data[field_name])
+            assert not set([field_name]) - set(serializer.errors.keys())
 
     def test_loading_good_json_data_is_valid(self, member_test_data):
         """Test that loading good data works."""
