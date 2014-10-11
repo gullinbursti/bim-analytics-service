@@ -15,7 +15,7 @@ class MemberIdTestValues(FieldTestValues):
         sys.maxsize,
         '  786',              # Number as a string, space padded
         ' 786 ',              # Number as a string, space padded
-        '00786',              # Number as a string, zero  padded
+        '00786',              # Number as a string, zero padded
         )
     all_bad_values = (
         None,                 # Empty/false values
@@ -34,10 +34,25 @@ class MemberNameTestValues(FieldTestValues):
     """Contains test values for member names."""
 
     all_good_values = (
-        'jerry',)
+        'jerry',
+        'aaa',           # Min size
+        'a' * 255,       # Max size
+        )
     all_bad_values = (
         None,
-        '',)
+        '',
+        '    ',
+        '\t',
+        'aa',            # Too small
+        'a' * 256,       # Too large
+        '   jerry',      # No white space padding
+        'jerry ',        # ^
+        ' jerry ',       # ^
+        '\tjerry ',      # ^
+        '\tjerry\t',     # ^
+        '\njerry',       # ^
+        '\njerry\n',     # ^
+        )
 
 
 class CohortDateTestValues(FieldTestValues):
