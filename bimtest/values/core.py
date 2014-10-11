@@ -1,4 +1,6 @@
-"""TODO - Add doc."""
+"""Field test data helpers."""
+
+from __future__ import absolute_import
 
 
 class FieldTestValues(object):
@@ -27,50 +29,6 @@ class FieldTestValues(object):
     def bad_value(self):
         """A known bad value."""
         return self.all_bad_values[0]
-
-
-class MemberIdTestValues(FieldTestValues):
-
-    """Contains test values for member IDs."""
-
-    all_good_values = (
-        92837492,)
-    all_bad_values = (
-        None,
-        -1,)
-
-
-class MemberNameTestValues(FieldTestValues):
-
-    """Contains test values for member names."""
-
-    all_good_values = (
-        'jerry',)
-    all_bad_values = (
-        None,
-        '',)
-
-
-class CohortDateTestValues(FieldTestValues):
-
-    """Contains test values for cohort date."""
-
-    all_good_values = (
-        '2014-10-01',)
-    all_bad_values = (
-        None,
-        '',)
-
-
-class CohortWeekTestValues(FieldTestValues):
-
-    """Contains test values for cohort weeks."""
-
-    all_good_values = (
-        '2014-43',)
-    all_bad_values = (
-        None,
-        '',)
 
 
 class DataGenerator(object):
