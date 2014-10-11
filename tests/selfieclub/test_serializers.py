@@ -1,109 +1,64 @@
 """Unit tests for the Selfieclub event endpoint serializers."""
 
 from __future__ import absolute_import
+from django.core.exceptions import ValidationError
 from io import StringIO
+from mock import patch
 from rest_framework.parsers import JSONParser
 from selfieclub.serializers import UserSerializer
+import pytest
 
 
-class FieldTestValues(object):
+@pytest.fixture(scope='module')
+def user_test_data():
+    # pylint: disable=function-redefined, global-variable-undefined
+    # pylint: disable=invalid-name, unnecessary-lambda, redefined-outer-name
+    """Return a copy of Member test data.
 
-    """Helper class to maintain good, and bad values for a given field."""
-
-    _good_values = (None,)
-    _bad_values = (None,)
-
-    @property
-    def good_values(self):
-        """Read-only tuple of good values."""
-        return self._good_values
-
-    @property
-    def bad_values(self):
-        """Read-only tuple of bad values."""
-        return self._bad_values
-
-    @property
-    def good_value(self):
-        """A known good value."""
-        return self._good_values[0]
-
-    @property
-    def bad_value(self):
-        """A known bad value."""
-        return self._bad_values[0]
+    This function uses closures, and redefines itself for efficency.  I am
+    also doing a bit of experimentation.
+    """
+    stream = StringIO(USER_GOOD_JSON)
+    data = JSONParser().parse(stream)
+    global user_test_data
+    user_test_data = lambda: data.copy()
+    return data
 
 
-class UserIdTestValues(FieldTestValues):
-
-    """Contains test values for user IDs."""
-
-    _good_values = (
-        92837492,)
-    _bad_values = (
-        None,
-        -1,)
-
-
-class UserNameTestValues(FieldTestValues):
-
-    """Contains test values for user names."""
-
-    _good_values = (
-        'jerry',)
-    _bad_values = (
-        None,
-        '',)
-
-
-class DataGenerator(object):
-
-    """Data generator, for use with FieldTestValues' children."""
-
-    def __init__(self, data):
-        """Create an instance of DataGenerator."""
-        self.data = data
-
-    def good_variation(self):
-        """Return a dictionary with good vaules in all the fields."""
-        good = {}
-        for key in self.data.keys():
-            good[key] = self.data[key].good_value
-        return good
-
-    def bad_variations(self):
-        """Return an array with bad data combinations for testing."""
-        good_base_line = self.good_variation()
-        variations = []
-        for key in self.data.keys():
-            for bad_value in self.data[key].bad_values:
-                bad_copy = good_base_line.copy()
-                bad_copy[key] = bad_value
-                variations.append({
-                    'data': bad_copy,
-                    'expected_bad': [key]})
-        return variations
-
-
+@pytest.mark.usefixtures("django_setup")
 class TestUserDeserialization(object):
-    # pylint: disable=too-few-public-methods, no-self-use
-    # pylint: disable=no-value-for-parameter, no-member
-    # pylint: disable=unexpected-keyword-arg
+    # pylint: disable=no-self-use, no-value-for-parameter, no-member
+    # pylint: disable=unexpected-keyword-arg, redefined-outer-name
 
     """Testing the Deserialization with UserSerializer."""
 
-    def test_loading_good_json_data_is_valid(self):
+    @pytest.mark.parametrize(
+        ('field_name', 'validator'),
+        [('id', 'selfieclub.serializers.validate_user_id')])
+    def test_calls_validator(self, user_test_data, field_name, validator):
+        """Make sure that the proper validator has been called.
+
+        Also makes certain that the the ValidationError() exception is being
+        listened to.
+        """
+        with patch(validator) as patched:
+            patched.side_effect = ValidationError('bee', 'boo')
+            serializer = UserSerializer(data=user_test_data)
+            assert not serializer.is_valid()
+            assert serializer.errors
+            assert not set([field_name]) - set(serializer.errors.keys())
+            patched.assert_called_with(user_test_data[field_name])
+
+    def test_loading_good_json_data_is_valid(self, user_test_data):
         """Test that loading good data works."""
-        stream = StringIO(USER_GOOD_JSON)
-        data_dict = JSONParser().parse(stream)
-        serializer = UserSerializer(data=data_dict)
+        serializer = UserSerializer(data=user_test_data)
         assert serializer.is_valid()
         assert not serializer.errors
         user_dto = serializer.object
-        assert data_dict['cohort_date'] == user_dto.cohort_date
-        assert data_dict['cohort_week'] == user_dto.cohort_week
-        assert data_dict['name'] == user_dto.name
-        assert data_dict['id'] == user_dto.id_
+        assert user_test_data['cohort_date'] == user_dto.cohort_date
+        assert user_test_data['cohort_week'] == user_dto.cohort_week
+        assert user_test_data['name'] == user_dto.name
+        assert user_test_data['id'] == user_dto.id_
 
 
 USER_GOOD_JSON = u"""

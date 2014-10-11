@@ -3,10 +3,11 @@
 from __future__ import absolute_import
 from . import dtos
 from rest_framework import serializers
+from bimcore.validators import validate_user_id
 
 
 class UserSerializer(serializers.Serializer):
-    # Mostly implemented in parent.  pylint: disable=too-few-public-methods
+    # pylint: disable=no-self-use
 
     """User information serializer."""
 
@@ -28,7 +29,6 @@ class UserSerializer(serializers.Serializer):
         )
 
     def restore_object(self, attrs, instance=None):
-        # Overriding `restore_object` from parent.  pylint: disable=no-self-use
         """Given a dictionary of deserialized field values."""
         assert instance is None, 'Cannot be used to update, only to create'
         return dtos.UserDto(
@@ -36,3 +36,8 @@ class UserSerializer(serializers.Serializer):
             attrs['name'],
             attrs['cohort_date'],
             attrs['cohort_week'])
+
+    def validate_id(self, attrs, source):
+        """User ID validation call."""
+        validate_user_id(attrs[source])
+        return attrs
