@@ -6,6 +6,7 @@ from io import StringIO
 from mock import patch
 from rest_framework.parsers import JSONParser
 from selfieclub.serializers import MemberSerializer, DeviceSerializer
+import mock
 import pytest
 
 
@@ -105,7 +106,6 @@ class TestDeviceDeserialization(object):
           'selfieclub.serializers.validate_device_orientation_deg'),
          ('os', 'selfieclub.serializers.validate_device_os'),
          ('os_version', 'selfieclub.serializers.validate_device_os_version'),
-         ('resolution', 'selfieclub.serializers.validate_device_resolution'),
          ('time', 'selfieclub.serializers.validate_device_time'),
          ('token', 'selfieclub.serializers.validate_device_token'),
          ('tz', 'selfieclub.serializers.validate_device_tz'),
@@ -125,6 +125,28 @@ class TestDeviceDeserialization(object):
             patched.assert_called_with(device_test_data[field_name])
             assert not set([field_name]) - set(serializer.errors.keys())
 
+    def test_calls_validate_device_resolution(self, device_test_data):
+        """Confirm that validate_device_resolution() is called.
+
+        validate_device_resolution() should be called twice:
+            - resolution_x
+            - resolution_y
+        """
+        validator = 'selfieclub.serializers.validate_device_resolution'
+        with patch(validator) as patched:
+            patched.side_effect = ValidationError(
+                'Fake validation error in unit testing.', 'boo')
+            serializer = DeviceSerializer(data=device_test_data)
+            assert not serializer.is_valid()
+            assert serializer.errors
+            assert 'resolution_x' in serializer.errors.keys()
+            assert 'resolution_y' in serializer.errors.keys()
+            patched.assert_has_calls(
+                any_order=True,
+                calls=[mock.call(device_test_data['resolution_x']),
+                       mock.call(device_test_data['resolution_y'])])
+
+
 DEVICE_GOOD_JSON = u"""
 {
     "adid": "TODO - fix adid",
@@ -138,7 +160,8 @@ DEVICE_GOOD_JSON = u"""
     "orientation_deg": "TODO - fix orientation_deg",
     "os": "TODO - fix os",
     "os_version": "TODO - fix os_version",
-    "resolution": "TODO - fix resolution",
+    "resolution_x": "TODO - fix resolution_x",
+    "resolution_y": "TODO - fix resolution_y",
     "time": "TODO - fix time",
     "token": "TODO - fix token",
     "tz": "TODO - fix tz",

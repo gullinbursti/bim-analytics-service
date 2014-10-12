@@ -22,7 +22,8 @@ class DeviceDto(object):
     def __init__(
             self, adid, battery_per, cpu, density, hardware_make,
             hardware_model, locale, orientation, orientation_deg, os_,
-            os_version, resolution, time, token, tz_, user_agent):
+            os_version, resolution_x, resolution_y, time, token, tz_,
+            user_agent):
         # pylint: disable=too-many-locals, too-many-arguments
         """Create an instance of DeviceDto."""
         self.adid = adid
@@ -36,7 +37,8 @@ class DeviceDto(object):
         self.orientation_deg = orientation_deg
         self.os_ = os_
         self.os_version = os_version
-        self.resolution = resolution
+        self.resolution_x = resolution_x
+        self.resolution_y = resolution_y
         self.time = time
         self.token = token
         self.tz_ = tz_

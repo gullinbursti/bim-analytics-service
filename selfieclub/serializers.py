@@ -78,7 +78,8 @@ class DeviceSerializer(serializers.Serializer):
     orientation_deg = serializers.CharField(required=True)
     os = serializers.CharField(required=True)  # pylint: disable=invalid-name
     os_version = serializers.CharField(required=True)
-    resolution = serializers.CharField(required=True)
+    resolution_x = serializers.CharField(required=True)
+    resolution_y = serializers.CharField(required=True)
     time = serializers.CharField(required=True)
     token = serializers.CharField(required=True)
     tz = serializers.CharField(required=True)  # pylint: disable=invalid-name
@@ -99,7 +100,8 @@ class DeviceSerializer(serializers.Serializer):
             orientation_deg=attrs['orientation_deg'],
             os_=attrs['os'],
             os_version=attrs['os_version'],
-            resolution=attrs['resolution'],
+            resolution_x=attrs['resolution_x'],
+            resolution_y=attrs['resolution_y'],
             time=attrs['time'],
             token=attrs['token'],
             tz_=attrs['tz'],
@@ -125,7 +127,12 @@ class DeviceSerializer(serializers.Serializer):
         validate_device_hardware_model(attrs[source])
         return attrs
 
-    def validate_resolution(self, attrs, source):
+    def validate_resolution_x(self, attrs, source):
+        """Validate resolution."""
+        validate_device_resolution(attrs[source])
+        return attrs
+
+    def validate_resolution_y(self, attrs, source):
         """Validate resolution."""
         validate_device_resolution(attrs[source])
         return attrs
