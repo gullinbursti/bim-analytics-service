@@ -19,6 +19,8 @@ __all__ = ('validate_device_adid',
            'validate_device_tz',
            'validate_device_user_agent')
 
+from bimcore.validators import IntegerValidator
+
 
 def validate_device_os(value):
     """TODO - Validates os."""
@@ -45,9 +47,8 @@ def validate_device_hardware_model(value):
 
 
 def validate_device_resolution(value):
-    """TODO - Validates resolution."""
-    # pylint: disable=unused-argument
-    pass
+    """Make sure that we have semi-sane numbers."""
+    (IntegerValidator(minimum=20, maximum=10*1024))(value)
 
 
 def validate_device_density(value):
