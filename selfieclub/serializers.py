@@ -15,22 +15,10 @@ class MemberSerializer(serializers.Serializer):
 
     """Member information serializer."""
 
-    # member ID
-    id = serializers.IntegerField(  # pylint: disable=invalid-name
-        required=True,
-        )
-    # member name
-    name = serializers.CharField(
-        required=True,
-        )
-    # In the work of 'YYYY-WW', where WW is week number.
-    cohort_week = serializers.CharField(
-        required=True,
-        )
-    # In the form of 'YYYY-MM-DD'.
-    cohort_date = serializers.CharField(
-        required=True,
-        )
+    id = serializers.IntegerField(required=True)  # noqa pylint: disable=invalid-name
+    name = serializers.CharField(required=True)
+    cohort_week = serializers.CharField(required=True)
+    cohort_date = serializers.CharField(required=True)
 
     def restore_object(self, attrs, instance=None):
         """Given a dictionary of deserialized field values."""
@@ -78,8 +66,8 @@ class DeviceSerializer(serializers.Serializer):
     orientation_deg = serializers.CharField(required=True)
     os = serializers.CharField(required=True)  # pylint: disable=invalid-name
     os_version = serializers.CharField(required=True)
-    resolution_x = serializers.CharField(required=True)
-    resolution_y = serializers.CharField(required=True)
+    resolution_x = serializers.IntegerField(required=True)
+    resolution_y = serializers.IntegerField(required=True)
     time = serializers.CharField(required=True)
     token = serializers.CharField(required=True)
     tz = serializers.CharField(required=True)  # pylint: disable=invalid-name
