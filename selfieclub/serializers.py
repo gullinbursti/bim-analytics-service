@@ -36,10 +36,10 @@ class MemberSerializer(serializers.Serializer):
         """Given a dictionary of deserialized field values."""
         assert instance is None, 'Cannot be used to update, only to create'
         return dtos.MemberDto(
-            attrs['id'],
-            attrs['name'],
-            attrs['cohort_date'],
-            attrs['cohort_week'])
+            id_=attrs['id'],
+            name=attrs['name'],
+            cohort_date=attrs['cohort_date'],
+            cohort_week=attrs['cohort_week'])
 
     def validate_id(self, attrs, source):
         """member ID validation call."""
