@@ -6,7 +6,8 @@ from bimcore.validators.member import validate_cohort_date
 from bimcore.validators.member import validate_cohort_week
 from bimcore.validators.member import validate_member_name
 from bimcore.validators.member import validate_member_id
-from bimcore.validators.analytics.device import *  # noqa pylint: disable=wildcard-import
+from bimcore.validators.analytics.device import *  # noqa pylint: disable=wildcard-import, unused-wildcard-import
+from bimcore.validators import IntegerValidator
 from rest_framework import serializers
 
 
@@ -117,12 +118,12 @@ class DeviceSerializer(serializers.Serializer):
 
     def validate_resolution_x(self, attrs, source):
         """Validate resolution."""
-        validate_device_resolution(attrs[source])
+        (IntegerValidator(minimum=20, maximum=1024*10))(attrs[source])
         return attrs
 
     def validate_resolution_y(self, attrs, source):
         """Validate resolution."""
-        validate_device_resolution(attrs[source])
+        (IntegerValidator(minimum=20, maximum=1024*10))(attrs[source])
         return attrs
 
     def validate_density(self, attrs, source):
