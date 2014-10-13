@@ -7,7 +7,7 @@ from bimcore.validators.member import validate_cohort_week
 from bimcore.validators.member import validate_member_name
 from bimcore.validators.member import validate_member_id
 from bimcore.validators.analytics.device import *  # noqa pylint: disable=wildcard-import, unused-wildcard-import
-from bimcore.validators import IntegerValidator
+from bimcore.validators import IntegerValidator, DecimalValidator
 from rest_framework import serializers
 
 
@@ -57,7 +57,7 @@ class DeviceSerializer(serializers.Serializer):
     """Device information validators."""
 
     adid = serializers.CharField(required=True)
-    battery_per = serializers.CharField(required=True)
+    battery_per = serializers.DecimalField(required=True)
     cpu = serializers.CharField(required=True)
     density = serializers.CharField(required=True)
     hardware_make = serializers.CharField(required=True)
@@ -163,7 +163,7 @@ class DeviceSerializer(serializers.Serializer):
 
     def validate_battery_per(self, attrs, source):
         """Validate battery_per."""
-        validate_device_battery_per(attrs[source])
+        (DecimalValidator(minimum=0, maximum=100))(attrs[source])
         return attrs
 
     def validate_orientation(self, attrs, source):
