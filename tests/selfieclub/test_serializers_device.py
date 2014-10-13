@@ -52,7 +52,6 @@ class TestDeviceDeserialization(object):
          ('orientation', 'selfieclub.serializers.validate_device_orientation'),
          ('orientation_deg',
           'selfieclub.serializers.validate_device_orientation_deg'),
-         ('os', 'selfieclub.serializers.validate_device_os'),
          ('os_version', 'selfieclub.serializers.validate_device_os_version'),
          ('time', 'selfieclub.serializers.validate_device_time'),
          ('token', 'selfieclub.serializers.validate_device_token'),
@@ -211,6 +210,36 @@ def test_validate_pixel_density_with_good_values(device_test_data, value):
     assert value == serializer.object.pixel_density
 
 
+# -----------------------------------------------------------------------------
+# os
+# -----------------------------------------------------------------------------
+@pytest.mark.usefixtures("django_setup")
+@pytest.mark.parametrize(
+    "value", (None, '', '\t', 'iOS', 'Ios', ' ios', ' ios  ', 'a'*9,
+              'Android', 'android '))
+def test_validate_os_with_bad_values(device_test_data, value):
+    # pylint: disable=redefined-outer-name, unexpected-keyword-arg
+    # pylint: disable=no-value-for-parameter, no-member
+    """TODO - add something."""
+    device_test_data['os'] = value
+    serializer = DeviceSerializer(data=device_test_data)
+    assert not serializer.is_valid()
+    assert not set(['os']) - set(serializer.errors.keys())
+
+
+@pytest.mark.usefixtures("django_setup")
+@pytest.mark.parametrize("value", ('ios', 'android'))
+def test_validate_os_with_good_values(device_test_data, value):
+    # pylint: disable=redefined-outer-name, unexpected-keyword-arg
+    # pylint: disable=no-value-for-parameter, no-member
+    """TODO - add something."""
+    device_test_data['os'] = value
+    serializer = DeviceSerializer(data=device_test_data)
+    assert serializer.is_valid(), serializer.errors
+    assert not serializer.errors
+    assert value == serializer.object.os_
+
+
 DEVICE_GOOD_JSON = u"""
 {
     "adid": "TODO - fix adid",
@@ -222,7 +251,7 @@ DEVICE_GOOD_JSON = u"""
     "locale": "TODO - fix locale",
     "orientation": "TODO - fix orientation",
     "orientation_deg": "TODO - fix orientation_deg",
-    "os": "TODO - fix os",
+    "os": "ios",
     "os_version": "TODO - fix os_version",
     "resolution_x": 768,
     "resolution_y": 1024,

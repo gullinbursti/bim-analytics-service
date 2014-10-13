@@ -2,12 +2,14 @@
 
 from __future__ import absolute_import
 from . import dtos
+from bimcore.validators import IntegerValidator, DecimalValidator
+from bimcore.validators.analytics.device import *  # noqa pylint: disable=wildcard-import, unused-wildcard-import
 from bimcore.validators.member import validate_cohort_date
 from bimcore.validators.member import validate_cohort_week
-from bimcore.validators.member import validate_member_name
 from bimcore.validators.member import validate_member_id
-from bimcore.validators.analytics.device import *  # noqa pylint: disable=wildcard-import, unused-wildcard-import
-from bimcore.validators import IntegerValidator, DecimalValidator
+from bimcore.validators.member import validate_member_name
+from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from rest_framework import serializers
 
 
@@ -98,7 +100,13 @@ class DeviceSerializer(serializers.Serializer):
 
     def validate_os(self, attrs, source):
         """Validate os."""
-        validate_device_os(attrs[source])
+        if len(attrs[source]) > 8:
+            raise ValidationError('String length greater than 8.')
+        # TODO - Do not instantiate RegexValidator every time.
+        (RegexValidator(
+            regex=r'^ios|android$',
+            message='Valid value is either \'ios\' or \'android\'.'
+            ))(attrs[source])
         return attrs
 
     def validate_os_version(self, attrs, source):
