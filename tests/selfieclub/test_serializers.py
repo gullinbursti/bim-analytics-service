@@ -9,7 +9,7 @@ from selfieclub.serializers import MemberSerializer
 import pytest
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='function')
 def member_test_data():
     # pylint: disable=function-redefined, global-variable-undefined
     # pylint: disable=invalid-name, unnecessary-lambda, redefined-outer-name
