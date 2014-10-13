@@ -59,7 +59,7 @@ class DeviceSerializer(serializers.Serializer):
     adid = serializers.CharField(required=True)
     battery_per = serializers.DecimalField(required=True)
     cpu = serializers.DecimalField(required=True)
-    density = serializers.CharField(required=True)
+    pixel_density = serializers.IntegerField(required=True)
     hardware_make = serializers.CharField(required=True)
     hardware_model = serializers.CharField(required=True)
     locale = serializers.CharField(required=True)
@@ -81,7 +81,7 @@ class DeviceSerializer(serializers.Serializer):
             adid=attrs['adid'],
             battery_per=attrs['battery_per'],
             cpu=attrs['cpu'],
-            density=attrs['density'],
+            pixel_density=attrs['pixel_density'],
             hardware_make=attrs['hardware_make'],
             hardware_model=attrs['hardware_model'],
             locale=attrs['locale'],
@@ -126,9 +126,9 @@ class DeviceSerializer(serializers.Serializer):
         (IntegerValidator(minimum=20, maximum=1024*10))(attrs[source])
         return attrs
 
-    def validate_density(self, attrs, source):
-        """Validate density."""
-        validate_device_density(attrs[source])
+    def validate_pixel_density(self, attrs, source):
+        """Validate pixel_density."""
+        (IntegerValidator(minimum=1, maximum=1024*10))(attrs[source])
         return attrs
 
     def validate_adid(self, attrs, source):

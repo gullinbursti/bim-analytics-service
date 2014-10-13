@@ -44,7 +44,6 @@ class TestDeviceDeserialization(object):
     @pytest.mark.parametrize(
         ('field_name', 'validator'),
         [('adid', 'selfieclub.serializers.validate_device_adid'),
-         ('density', 'selfieclub.serializers.validate_device_density'),
          ('hardware_make',
           'selfieclub.serializers.validate_device_hardware_make'),
          ('hardware_model',
@@ -184,12 +183,40 @@ def test_validate_cpu_with_good_values(device_test_data, value):
     assert value == serializer.object.cpu
 
 
+# -----------------------------------------------------------------------------
+# pixel_density
+# -----------------------------------------------------------------------------
+@pytest.mark.usefixtures("django_setup")
+@pytest.mark.parametrize("value", (None, '', 0, -1, 1024*10+1, 'some_string'))
+def test_validate_pixel_density_with_bad_values(device_test_data, value):
+    # pylint: disable=redefined-outer-name, unexpected-keyword-arg
+    # pylint: disable=no-value-for-parameter, no-member
+    """TODO - add something."""
+    device_test_data['pixel_density'] = value
+    serializer = DeviceSerializer(data=device_test_data)
+    assert not serializer.is_valid()
+    assert not set(['pixel_density']) - set(serializer.errors.keys())
+
+
+@pytest.mark.usefixtures("django_setup")
+@pytest.mark.parametrize("value", (1, 1024*10))
+def test_validate_pixel_density_with_good_values(device_test_data, value):
+    # pylint: disable=redefined-outer-name, unexpected-keyword-arg
+    # pylint: disable=no-value-for-parameter, no-member
+    """TODO - add something."""
+    device_test_data['pixel_density'] = value
+    serializer = DeviceSerializer(data=device_test_data)
+    assert serializer.is_valid(), serializer.errors
+    assert not serializer.errors
+    assert value == serializer.object.pixel_density
+
+
 DEVICE_GOOD_JSON = u"""
 {
     "adid": "TODO - fix adid",
     "battery_per": 57.6789,
     "cpu": 93.19216,
-    "density": "TODO - fix density",
+    "pixel_density": 157,
     "hardware_make": "TODO - fix hardware_make",
     "hardware_model": "TODO - fix hardware_model",
     "locale": "TODO - fix locale",

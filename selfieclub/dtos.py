@@ -20,7 +20,7 @@ class DeviceDto(object):
     """Device Data Transfer Object (DTO)."""
 
     def __init__(
-            self, adid, battery_per, cpu, density, hardware_make,
+            self, adid, battery_per, cpu, pixel_density, hardware_make,
             hardware_model, locale, orientation, orientation_deg, os_,
             os_version, resolution_x, resolution_y, time, token, tz_,
             user_agent):
@@ -29,7 +29,7 @@ class DeviceDto(object):
         self.adid = adid
         self.battery_per = battery_per
         self.cpu = cpu
-        self.density = density
+        self.pixel_density = pixel_density
         self.hardware_make = hardware_make
         self.hardware_model = hardware_model
         self.locale = locale
