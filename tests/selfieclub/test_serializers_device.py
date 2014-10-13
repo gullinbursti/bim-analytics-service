@@ -45,7 +45,6 @@ class TestDeviceDeserialization(object):
         ('field_name', 'validator'),
         [('adid', 'selfieclub.serializers.validate_device_adid'),
          ('locale', 'selfieclub.serializers.validate_device_locale'),
-         ('orientation', 'selfieclub.serializers.validate_device_orientation'),
          ('orientation_deg',
           'selfieclub.serializers.validate_device_orientation_deg'),
          ('time', 'selfieclub.serializers.validate_device_time'),
@@ -210,7 +209,7 @@ def test_validate_pixel_density_with_good_values(device_test_data, value):
 # -----------------------------------------------------------------------------
 @pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize(
-    "value", (None, '', '\t', 'iOS', 'Ios', ' ios', ' ios  ', 'a'*9,
+    "value", (None, '', '\t', '\niOS', 'Ios', ' ios', ' ios  ', 'a'*9,
               'Android', 'android '))
 def test_validate_os_with_bad_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
@@ -269,7 +268,7 @@ def test_validate_hardware_make_with_good_values(device_test_data, value):
 # -----------------------------------------------------------------------------
 @pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize(
-    "value", (None, '', 'y', 't'*65, 'iPhone 5 ', ' iPhone 5', '\tiPhone 5',
+    "value", (None, '', 'y', 't'*65, '\niPhone 5 ', ' iPhone 5', '\tiPhone 5',
               'a'))
 def test_validate_hardware_model_with_bad_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
@@ -326,6 +325,35 @@ def test_validate_os_version_with_good_values(device_test_data, value):
     assert value == serializer.object.os_version
 
 
+# -----------------------------------------------------------------------------
+# orientation
+# -----------------------------------------------------------------------------
+@pytest.mark.usefixtures("django_setup")
+@pytest.mark.parametrize(
+    "value", (None, '', '\nportrait', 'portrait\r', 'portrait   '))
+def test_validate_orientation_with_bad_values(device_test_data, value):
+    # pylint: disable=redefined-outer-name, unexpected-keyword-arg
+    # pylint: disable=no-value-for-parameter, no-member
+    """TODO - add something."""
+    device_test_data['orientation'] = value
+    serializer = DeviceSerializer(data=device_test_data)
+    assert not serializer.is_valid()
+    assert not set(['orientation']) - set(serializer.errors.keys())
+
+
+@pytest.mark.usefixtures("django_setup")
+@pytest.mark.parametrize("value", ('landscape', 'portrait'))
+def test_validate_orientation_with_good_values(device_test_data, value):
+    # pylint: disable=redefined-outer-name, unexpected-keyword-arg
+    # pylint: disable=no-value-for-parameter, no-member
+    """TODO - add something."""
+    device_test_data['orientation'] = value
+    serializer = DeviceSerializer(data=device_test_data)
+    assert serializer.is_valid(), serializer.errors
+    assert not serializer.errors
+    assert value == serializer.object.orientation
+
+
 DEVICE_GOOD_JSON = u"""
 {
     "adid": "TODO - fix adid",
@@ -335,7 +363,7 @@ DEVICE_GOOD_JSON = u"""
     "hardware_make": "Apple",
     "hardware_model": "iPhone 4s",
     "locale": "TODO - fix locale",
-    "orientation": "TODO - fix orientation",
+    "orientation": "portrait",
     "orientation_deg": "TODO - fix orientation_deg",
     "os": "ios",
     "os_version": "7.1.2",

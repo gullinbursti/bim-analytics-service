@@ -11,8 +11,7 @@ from bimcore.validators.member import validate_member_name
 from bimcore.validators import validate_not_white_space_padded, \
     validate_not_none
 from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator, MinLengthValidator, \
-    MaxLengthValidator
+from django.core.validators import MinLengthValidator, MaxLengthValidator
 from rest_framework import serializers
 
 
@@ -105,11 +104,9 @@ class DeviceSerializer(serializers.Serializer):
         """Validate os."""
         if len(attrs[source]) > 8:
             raise ValidationError('String length greater than 8.')
-        # TODO - Do not instantiate RegexValidator every time.
-        (RegexValidator(
-            regex=r'^ios|android$',
-            message='Valid value is either \'ios\' or \'android\'.'
-            ))(attrs[source])
+        if attrs[source] not in ('ios', 'android'):
+            raise ValidationError(
+                'Valid value is either \'ios\' or \'android\'.')
         return attrs
 
     def validate_os_version(self, attrs, source):
@@ -188,7 +185,12 @@ class DeviceSerializer(serializers.Serializer):
 
     def validate_orientation(self, attrs, source):
         """Validate orientation."""
-        validate_device_orientation(attrs[source])
+        if len(attrs[source]) > 9:
+            raise ValidationError('String length greater than 8.')
+        # TODO - Do not instantiate RegexValidator every time.
+        if attrs[source] not in ('landscape', 'portrait'):
+            raise ValidationError(
+                'Valid value is either \'landscape\' or \'portrait\'.')
         return attrs
 
     def validate_orientation_deg(self, attrs, source):
