@@ -45,8 +45,6 @@ class TestDeviceDeserialization(object):
         ('field_name', 'validator'),
         [('adid', 'selfieclub.serializers.validate_device_adid'),
          ('locale', 'selfieclub.serializers.validate_device_locale'),
-         ('orientation_deg',
-          'selfieclub.serializers.validate_device_orientation_deg'),
          ('time', 'selfieclub.serializers.validate_device_time'),
          ('token', 'selfieclub.serializers.validate_device_token'),
          ('tz', 'selfieclub.serializers.validate_device_tz'),
@@ -354,6 +352,34 @@ def test_validate_orientation_with_good_values(device_test_data, value):
     assert value == serializer.object.orientation
 
 
+# -----------------------------------------------------------------------------
+# orientation_deg
+# -----------------------------------------------------------------------------
+@pytest.mark.usefixtures("django_setup")
+@pytest.mark.parametrize("value", (None, '', -1, 91, 'some_string'))
+def test_validate_orientation_deg_with_bad_values(device_test_data, value):
+    # pylint: disable=redefined-outer-name, unexpected-keyword-arg
+    # pylint: disable=no-value-for-parameter, no-member
+    """TODO - add something."""
+    device_test_data['orientation_deg'] = value
+    serializer = DeviceSerializer(data=device_test_data)
+    assert not serializer.is_valid()
+    assert not set(['orientation_deg']) - set(serializer.errors.keys())
+
+
+@pytest.mark.usefixtures("django_setup")
+@pytest.mark.parametrize("value", (0, 90, 180, 270))
+def test_validate_orientation_deg_with_good_values(device_test_data, value):
+    # pylint: disable=redefined-outer-name, unexpected-keyword-arg
+    # pylint: disable=no-value-for-parameter, no-member
+    """TODO - add something."""
+    device_test_data['orientation_deg'] = value
+    serializer = DeviceSerializer(data=device_test_data)
+    assert serializer.is_valid(), serializer.errors
+    assert not serializer.errors
+    assert value == serializer.object.orientation_deg
+
+
 DEVICE_GOOD_JSON = u"""
 {
     "adid": "TODO - fix adid",
@@ -364,7 +390,7 @@ DEVICE_GOOD_JSON = u"""
     "hardware_model": "iPhone 4s",
     "locale": "TODO - fix locale",
     "orientation": "portrait",
-    "orientation_deg": "TODO - fix orientation_deg",
+    "orientation_deg": 0,
     "os": "ios",
     "os_version": "7.1.2",
     "resolution_x": 768,

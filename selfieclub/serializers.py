@@ -68,7 +68,7 @@ class DeviceSerializer(serializers.Serializer):
     hardware_model = serializers.CharField(required=True)
     locale = serializers.CharField(required=True)
     orientation = serializers.CharField(required=True)
-    orientation_deg = serializers.CharField(required=True)
+    orientation_deg = serializers.IntegerField(required=True)
     os = serializers.CharField(required=True)  # pylint: disable=invalid-name
     os_version = serializers.CharField(required=True)
     resolution_x = serializers.IntegerField(required=True)
@@ -195,7 +195,8 @@ class DeviceSerializer(serializers.Serializer):
 
     def validate_orientation_deg(self, attrs, source):
         """Validate orientation_deg."""
-        validate_device_orientation_deg(attrs[source])
+        if attrs[source] not in (0, 90, 180, 270):
+            raise ValidationError('Value must be one of: 0, 90, 180, 270')
         return attrs
 
     def validate_user_agent(self, attrs, source):
