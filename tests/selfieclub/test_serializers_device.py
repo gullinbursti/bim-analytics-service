@@ -48,7 +48,6 @@ class TestDeviceDeserialization(object):
          ('orientation', 'selfieclub.serializers.validate_device_orientation'),
          ('orientation_deg',
           'selfieclub.serializers.validate_device_orientation_deg'),
-         ('os_version', 'selfieclub.serializers.validate_device_os_version'),
          ('time', 'selfieclub.serializers.validate_device_time'),
          ('token', 'selfieclub.serializers.validate_device_token'),
          ('tz', 'selfieclub.serializers.validate_device_tz'),
@@ -285,7 +284,7 @@ def test_validate_hardware_model_with_bad_values(device_test_data, value):
 @pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize(
     "value", ('iPhone 5', 'iPhone 6plus', 'Galaxy S', 'Galaxy S II',
-              'Galaxy S5', 'GT-I9300', 'gH'))
+              'Galaxy S5', 'GT-I9300', 'gH', 'r'*64))
 def test_validate_hardware_model_with_good_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
@@ -295,6 +294,36 @@ def test_validate_hardware_model_with_good_values(device_test_data, value):
     assert serializer.is_valid(), serializer.errors
     assert not serializer.errors
     assert value == serializer.object.hardware_model
+
+
+# -----------------------------------------------------------------------------
+# os_version
+# -----------------------------------------------------------------------------
+@pytest.mark.usefixtures("django_setup")
+@pytest.mark.parametrize(
+    "value", (None, '', 'g', '   8.0.2', '8.0.2\n', 'r'*65))
+def test_validate_os_version_with_bad_values(device_test_data, value):
+    # pylint: disable=redefined-outer-name, unexpected-keyword-arg
+    # pylint: disable=no-value-for-parameter, no-member
+    """TODO - add something."""
+    device_test_data['os_version'] = value
+    serializer = DeviceSerializer(data=device_test_data)
+    assert not serializer.is_valid()
+    assert not set(['os_version']) - set(serializer.errors.keys())
+
+
+@pytest.mark.usefixtures("django_setup")
+@pytest.mark.parametrize(
+    "value", ('8.0.2', '7.1.1', '7.1', '2.3.7', '4.4.4', '1.1', 'b'*64))
+def test_validate_os_version_with_good_values(device_test_data, value):
+    # pylint: disable=redefined-outer-name, unexpected-keyword-arg
+    # pylint: disable=no-value-for-parameter, no-member
+    """TODO - add something."""
+    device_test_data['os_version'] = value
+    serializer = DeviceSerializer(data=device_test_data)
+    assert serializer.is_valid(), serializer.errors
+    assert not serializer.errors
+    assert value == serializer.object.os_version
 
 
 DEVICE_GOOD_JSON = u"""
@@ -309,7 +338,7 @@ DEVICE_GOOD_JSON = u"""
     "orientation": "TODO - fix orientation",
     "orientation_deg": "TODO - fix orientation_deg",
     "os": "ios",
-    "os_version": "TODO - fix os_version",
+    "os_version": "7.1.2",
     "resolution_x": 768,
     "resolution_y": 1024,
     "time": "TODO - fix time",

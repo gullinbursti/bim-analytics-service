@@ -114,7 +114,10 @@ class DeviceSerializer(serializers.Serializer):
 
     def validate_os_version(self, attrs, source):
         """Validate os_version."""
-        validate_device_os_version(attrs[source])
+        validate_not_none(attrs[source])
+        (MaxLengthValidator(64))(attrs[source])
+        validate_not_white_space_padded(attrs[source])
+        (MinLengthValidator(2))(attrs[source])
         return attrs
 
     def validate_hardware_make(self, attrs, source):
