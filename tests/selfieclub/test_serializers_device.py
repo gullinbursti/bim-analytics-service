@@ -47,8 +47,7 @@ class TestDeviceDeserialization(object):
          ('locale', 'selfieclub.serializers.validate_device_locale'),
          ('time', 'selfieclub.serializers.validate_device_time'),
          ('token', 'selfieclub.serializers.validate_device_token'),
-         ('tz', 'selfieclub.serializers.validate_device_tz'),
-         ('user_agent', 'selfieclub.serializers.validate_device_user_agent')])
+         ('tz', 'selfieclub.serializers.validate_device_tz')])
     def test_calls_validator(self, device_test_data, field_name, validator):
         """Make sure that the proper validator has been called.
 
@@ -328,7 +327,8 @@ def test_validate_os_version_with_good_values(device_test_data, value):
 # -----------------------------------------------------------------------------
 @pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize(
-    "value", (None, '', '\nportrait', 'portrait\r', 'portrait   '))
+    "value", (None, '', '\nportrait', 'portrait\r', 'portrait   ',
+              'Landscape'))
 def test_validate_orientation_with_bad_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
@@ -380,6 +380,58 @@ def test_validate_orientation_deg_with_good_values(device_test_data, value):
     assert value == serializer.object.orientation_deg
 
 
+# -----------------------------------------------------------------------------
+# user_agent
+# -----------------------------------------------------------------------------
+@pytest.mark.usefixtures("django_setup")
+@pytest.mark.parametrize("value", ('g'*2049, 'Apple-iPhone2C1/901.334 ',
+                                   '\nApple-iPhone2C1/901.334'))
+def test_validate_user_agent_with_bad_values(device_test_data, value):
+    # pylint: disable=redefined-outer-name, unexpected-keyword-arg
+    # pylint: disable=no-value-for-parameter, no-member
+    """TODO - add something."""
+    device_test_data['user_agent'] = value
+    serializer = DeviceSerializer(data=device_test_data)
+    assert not serializer.is_valid()
+    assert not set(['user_agent']) - set(serializer.errors.keys())
+
+
+@pytest.mark.usefixtures("django_setup")
+@pytest.mark.parametrize(
+    "value", (
+        '',
+        'Apple-iPhone2C1/901.334',
+        'Apple-iPhone5C2/1001.525',
+        'Apple-iPod5C1/1001.523',
+        'Apple-iPad2C3/1001.403',
+        'Mozilla/5.0 (Linux; U; Android 4.0.3; de-ch; HTC Sensation Build/IML74K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30',  # noqa
+        'Mozilla/5.0 (Linux; U; Android 2.3; en-us) AppleWebKit/999+ (KHTML, like Gecko) Safari/999.9',  # noqa
+        'Mozilla/5.0 (Linux; U; Android 2.3.5; zh-cn; HTC_IncredibleS_S710e Build/GRJ90) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1',  # noqa
+        'Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19',  # noqa
+        'a'*2048))
+def test_validate_user_agent_with_good_values(device_test_data, value):
+    # pylint: disable=redefined-outer-name, unexpected-keyword-arg
+    # pylint: disable=no-value-for-parameter, no-member
+    """TODO - add something."""
+    device_test_data['user_agent'] = value
+    serializer = DeviceSerializer(data=device_test_data)
+    assert serializer.is_valid(), serializer.errors
+    assert not serializer.errors
+    assert value == serializer.object.user_agent
+
+
+@pytest.mark.usefixtures("django_setup")
+def test_validate_user_agent_none(device_test_data):
+    # pylint: disable=redefined-outer-name, unexpected-keyword-arg
+    # pylint: disable=no-value-for-parameter, no-member
+    """TODO - add something."""
+    device_test_data['user_agent'] = None
+    serializer = DeviceSerializer(data=device_test_data)
+    assert serializer.is_valid(), serializer.errors
+    assert not serializer.errors
+    assert '' == serializer.object.user_agent
+
+
 DEVICE_GOOD_JSON = u"""
 {
     "adid": "TODO - fix adid",
@@ -398,6 +450,6 @@ DEVICE_GOOD_JSON = u"""
     "time": "TODO - fix time",
     "token": "TODO - fix token",
     "tz": "TODO - fix tz",
-    "user_agent": "TODO - fix user_agent"
+    "user_agent": "Apple-iPhone5C2/1001.525"
 }
 """

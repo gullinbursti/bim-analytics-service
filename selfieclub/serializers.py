@@ -76,7 +76,7 @@ class DeviceSerializer(serializers.Serializer):
     time = serializers.CharField(required=True)
     token = serializers.CharField(required=True)
     tz = serializers.CharField(required=True)  # pylint: disable=invalid-name
-    user_agent = serializers.CharField(required=True)
+    user_agent = serializers.CharField(required=False)
 
     def restore_object(self, attrs, instance=None):
         """Given a dictionary of deserialized field values."""
@@ -201,5 +201,7 @@ class DeviceSerializer(serializers.Serializer):
 
     def validate_user_agent(self, attrs, source):
         """Validate user_agent."""
-        validate_device_user_agent(attrs[source])
+        validate_not_none(attrs[source])
+        (MaxLengthValidator(2048))(attrs[source])
+        validate_not_white_space_padded(attrs[source])
         return attrs
