@@ -58,7 +58,7 @@ class DeviceSerializer(serializers.Serializer):
 
     adid = serializers.CharField(required=True)
     battery_per = serializers.DecimalField(required=True)
-    cpu = serializers.CharField(required=True)
+    cpu = serializers.DecimalField(required=True)
     density = serializers.CharField(required=True)
     hardware_make = serializers.CharField(required=True)
     hardware_model = serializers.CharField(required=True)
@@ -158,7 +158,7 @@ class DeviceSerializer(serializers.Serializer):
 
     def validate_cpu(self, attrs, source):
         """Validate cpu."""
-        validate_device_cpu(attrs[source])
+        (DecimalValidator(minimum=0, maximum=100))(attrs[source])
         return attrs
 
     def validate_battery_per(self, attrs, source):

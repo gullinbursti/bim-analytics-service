@@ -12,6 +12,9 @@ import pytest
 
 RESOLUTION_VALUES_GOOD = (20, 1024*10)
 RESOLUTION_VALUES_BAD = (None, '', 0, -100, 19, 1024*10+1, 'some_string')
+PERCENTAGE_VALUES_GOOD = (Decimal(0), Decimal(100), Decimal(0.00000),
+                          Decimal(100.00000), Decimal(34.0980))
+PERCENTAGE_VALUES_BAD = (None, '', -1, -0.00001, 100.000001, 'hello')
 
 
 @pytest.fixture(scope='function')
@@ -41,7 +44,6 @@ class TestDeviceDeserialization(object):
     @pytest.mark.parametrize(
         ('field_name', 'validator'),
         [('adid', 'selfieclub.serializers.validate_device_adid'),
-         ('cpu', 'selfieclub.serializers.validate_device_cpu'),
          ('density', 'selfieclub.serializers.validate_device_density'),
          ('hardware_make',
           'selfieclub.serializers.validate_device_hardware_make'),
@@ -130,8 +132,7 @@ def test_validate_resolution_x_with_bad_values(device_test_data, value):
 # battery_per
 # -----------------------------------------------------------------------------
 @pytest.mark.usefixtures("django_setup")
-@pytest.mark.parametrize(
-    "value", [None, '', -1, -0.00001, 100.000001, 'hello'])
+@pytest.mark.parametrize("value", PERCENTAGE_VALUES_BAD)
 def test_validate_battery_per_with_bad_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
@@ -143,9 +144,7 @@ def test_validate_battery_per_with_bad_values(device_test_data, value):
 
 
 @pytest.mark.usefixtures("django_setup")
-@pytest.mark.parametrize(
-    "value", [Decimal(0), Decimal(100), Decimal(0.00000), Decimal(100.00000),
-              Decimal(34.0980)])
+@pytest.mark.parametrize("value", PERCENTAGE_VALUES_GOOD)
 def test_validate_battery_per_with_good_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
@@ -157,11 +156,39 @@ def test_validate_battery_per_with_good_values(device_test_data, value):
     assert value == serializer.object.battery_per
 
 
+# -----------------------------------------------------------------------------
+# cpu
+# -----------------------------------------------------------------------------
+@pytest.mark.usefixtures("django_setup")
+@pytest.mark.parametrize("value", PERCENTAGE_VALUES_BAD)
+def test_validate_cpu_with_bad_values(device_test_data, value):
+    # pylint: disable=redefined-outer-name, unexpected-keyword-arg
+    # pylint: disable=no-value-for-parameter, no-member
+    """TODO - add something."""
+    device_test_data['cpu'] = value
+    serializer = DeviceSerializer(data=device_test_data)
+    assert not serializer.is_valid()
+    assert not set(['cpu']) - set(serializer.errors.keys())
+
+
+@pytest.mark.usefixtures("django_setup")
+@pytest.mark.parametrize("value", PERCENTAGE_VALUES_GOOD)
+def test_validate_cpu_with_good_values(device_test_data, value):
+    # pylint: disable=redefined-outer-name, unexpected-keyword-arg
+    # pylint: disable=no-value-for-parameter, no-member
+    """TODO - add something."""
+    device_test_data['cpu'] = value
+    serializer = DeviceSerializer(data=device_test_data)
+    assert serializer.is_valid(), serializer.errors
+    assert not serializer.errors
+    assert value == serializer.object.cpu
+
+
 DEVICE_GOOD_JSON = u"""
 {
     "adid": "TODO - fix adid",
     "battery_per": 57.6789,
-    "cpu": "TODO - fix cpu",
+    "cpu": 93.19216,
     "density": "TODO - fix density",
     "hardware_make": "TODO - fix hardware_make",
     "hardware_model": "TODO - fix hardware_model",
