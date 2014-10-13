@@ -301,7 +301,7 @@ def test_validate_hardware_model_with_good_values(device_test_data, value):
 # -----------------------------------------------------------------------------
 @pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize(
-    "value", (None, '', 'g', '   8.0.2', '8.0.2\n', 'r'*65))
+    "value", (None, '', 'g', '   8.0.2', '8.0.2\n', 'r'*33))
 def test_validate_os_version_with_bad_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
@@ -314,7 +314,7 @@ def test_validate_os_version_with_bad_values(device_test_data, value):
 
 @pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize(
-    "value", ('8.0.2', '7.1.1', '7.1', '2.3.7', '4.4.4', '1.1', 'b'*64))
+    "value", ('8.0.2', '7.1.1', '7.1', '2.3.7', '4.4.4', '1.1', 'b'*32))
 def test_validate_os_version_with_good_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
