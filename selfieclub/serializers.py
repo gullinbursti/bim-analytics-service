@@ -127,7 +127,10 @@ class DeviceSerializer(serializers.Serializer):
 
     def validate_hardware_model(self, attrs, source):
         """Validate hardware_model."""
-        validate_device_hardware_model(attrs[source])
+        validate_not_none(attrs[source])
+        (MaxLengthValidator(64))(attrs[source])
+        validate_not_white_space_padded(attrs[source])
+        (MinLengthValidator(2))(attrs[source])
         return attrs
 
     def validate_resolution_x(self, attrs, source):

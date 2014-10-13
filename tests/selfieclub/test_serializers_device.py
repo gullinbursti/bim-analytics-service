@@ -44,8 +44,6 @@ class TestDeviceDeserialization(object):
     @pytest.mark.parametrize(
         ('field_name', 'validator'),
         [('adid', 'selfieclub.serializers.validate_device_adid'),
-         ('hardware_model',
-          'selfieclub.serializers.validate_device_hardware_model'),
          ('locale', 'selfieclub.serializers.validate_device_locale'),
          ('orientation', 'selfieclub.serializers.validate_device_orientation'),
          ('orientation_deg',
@@ -267,14 +265,46 @@ def test_validate_hardware_make_with_good_values(device_test_data, value):
     assert value == serializer.object.hardware_make
 
 
+# -----------------------------------------------------------------------------
+# hardware_model
+# -----------------------------------------------------------------------------
+@pytest.mark.usefixtures("django_setup")
+@pytest.mark.parametrize(
+    "value", (None, '', 'y', 't'*65, 'iPhone 5 ', ' iPhone 5', '\tiPhone 5',
+              'a'))
+def test_validate_hardware_model_with_bad_values(device_test_data, value):
+    # pylint: disable=redefined-outer-name, unexpected-keyword-arg
+    # pylint: disable=no-value-for-parameter, no-member
+    """TODO - add something."""
+    device_test_data['hardware_model'] = value
+    serializer = DeviceSerializer(data=device_test_data)
+    assert not serializer.is_valid()
+    assert not set(['hardware_model']) - set(serializer.errors.keys())
+
+
+@pytest.mark.usefixtures("django_setup")
+@pytest.mark.parametrize(
+    "value", ('iPhone 5', 'iPhone 6plus', 'Galaxy S', 'Galaxy S II',
+              'Galaxy S5', 'GT-I9300', 'gH'))
+def test_validate_hardware_model_with_good_values(device_test_data, value):
+    # pylint: disable=redefined-outer-name, unexpected-keyword-arg
+    # pylint: disable=no-value-for-parameter, no-member
+    """TODO - add something."""
+    device_test_data['hardware_model'] = value
+    serializer = DeviceSerializer(data=device_test_data)
+    assert serializer.is_valid(), serializer.errors
+    assert not serializer.errors
+    assert value == serializer.object.hardware_model
+
+
 DEVICE_GOOD_JSON = u"""
 {
     "adid": "TODO - fix adid",
     "battery_per": 57.6789,
     "cpu": 93.19216,
     "pixel_density": 157,
-    "hardware_make": "iPhone",
-    "hardware_model": "TODO - fix hardware_model",
+    "hardware_make": "Apple",
+    "hardware_model": "iPhone 4s",
     "locale": "TODO - fix locale",
     "orientation": "TODO - fix orientation",
     "orientation_deg": "TODO - fix orientation_deg",
