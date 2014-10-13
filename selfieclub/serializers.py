@@ -8,8 +8,11 @@ from bimcore.validators.member import validate_cohort_date
 from bimcore.validators.member import validate_cohort_week
 from bimcore.validators.member import validate_member_id
 from bimcore.validators.member import validate_member_name
+from bimcore.validators import validate_not_white_space_padded, \
+    validate_not_none
 from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, MinLengthValidator, \
+    MaxLengthValidator
 from rest_framework import serializers
 
 
@@ -116,7 +119,10 @@ class DeviceSerializer(serializers.Serializer):
 
     def validate_hardware_make(self, attrs, source):
         """Validate hardware_make."""
-        validate_device_hardware_make(attrs[source])
+        validate_not_none(attrs[source])
+        (MaxLengthValidator(64))(attrs[source])
+        validate_not_white_space_padded(attrs[source])
+        (MinLengthValidator(2))(attrs[source])
         return attrs
 
     def validate_hardware_model(self, attrs, source):

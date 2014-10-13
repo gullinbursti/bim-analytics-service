@@ -44,8 +44,6 @@ class TestDeviceDeserialization(object):
     @pytest.mark.parametrize(
         ('field_name', 'validator'),
         [('adid', 'selfieclub.serializers.validate_device_adid'),
-         ('hardware_make',
-          'selfieclub.serializers.validate_device_hardware_make'),
          ('hardware_model',
           'selfieclub.serializers.validate_device_hardware_model'),
          ('locale', 'selfieclub.serializers.validate_device_locale'),
@@ -240,13 +238,42 @@ def test_validate_os_with_good_values(device_test_data, value):
     assert value == serializer.object.os_
 
 
+# -----------------------------------------------------------------------------
+# hardware_make
+# -----------------------------------------------------------------------------
+@pytest.mark.usefixtures("django_setup")
+@pytest.mark.parametrize(
+    "value", (None, '', 'y', 'z'*65, 'Apple   ', ' Apple', ' Samsung '))
+def test_validate_hardware_make_with_bad_values(device_test_data, value):
+    # pylint: disable=redefined-outer-name, unexpected-keyword-arg
+    # pylint: disable=no-value-for-parameter, no-member
+    """TODO - add something."""
+    device_test_data['hardware_make'] = value
+    serializer = DeviceSerializer(data=device_test_data)
+    assert not serializer.is_valid()
+    assert not set(['hardware_make']) - set(serializer.errors.keys())
+
+
+@pytest.mark.usefixtures("django_setup")
+@pytest.mark.parametrize("value", ('HTC', 'Samsung', 'Apple', 'AB', 'a'*64))
+def test_validate_hardware_make_with_good_values(device_test_data, value):
+    # pylint: disable=redefined-outer-name, unexpected-keyword-arg
+    # pylint: disable=no-value-for-parameter, no-member
+    """TODO - add something."""
+    device_test_data['hardware_make'] = value
+    serializer = DeviceSerializer(data=device_test_data)
+    assert serializer.is_valid(), serializer.errors
+    assert not serializer.errors
+    assert value == serializer.object.hardware_make
+
+
 DEVICE_GOOD_JSON = u"""
 {
     "adid": "TODO - fix adid",
     "battery_per": 57.6789,
     "cpu": 93.19216,
     "pixel_density": 157,
-    "hardware_make": "TODO - fix hardware_make",
+    "hardware_make": "iPhone",
     "hardware_model": "TODO - fix hardware_model",
     "locale": "TODO - fix locale",
     "orientation": "TODO - fix orientation",
