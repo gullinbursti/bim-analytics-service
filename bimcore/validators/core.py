@@ -6,6 +6,7 @@ __all__ = ('DecimalValidator',
            'IntegerValidator',
            'ExactLengthValidator',
            'validate_guid',
+           'validate_is_string',
            'validate_locale_code',
            'validate_not_string',
            'validate_not_white_space_padded',
@@ -35,6 +36,12 @@ def validate_not_string(value):
     """Validate that the value is not a string."""
     if isinstance(value, str):
         raise ValidationError('String value not allowed.')
+
+
+def validate_is_string(value):
+    """Validate that we have s string."""
+    if not isinstance(value, basestring):
+        raise ValidationError('String expected.')
 
 
 def validate_guid(value):

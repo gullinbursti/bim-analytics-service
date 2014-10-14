@@ -3,6 +3,8 @@
 
 from __future__ import absolute_import
 from django.core.exceptions import ValidationError
+from bimcore.validators import ExactLengthValidator, validate_is_string
+from datetime import datetime
 
 
 UTC_OFFSETS = (
@@ -26,3 +28,18 @@ def validate_utc_offset(value):
     """
     if value not in UTC_OFFSETS:
         raise ValidationError('Unknown UTC offset.  Expects \'UTC±HH:MM\'.')
+
+
+def validate_utc_iso8601(value):
+    """Validate date time in UTC ISO 8601 format.
+
+    Time must be in at/on UTC.  Only the following form is allowed:
+        2014-10-13T15:09:10Z
+    """
+    validate_is_string(value)
+    (ExactLengthValidator(20))(value)
+    try:
+        datetime.strptime(value, r'%Y-%m-%dT%H:%M:%SZ')
+    except ValueError:
+        raise ValidationError(
+            'Datetime expected to be in \'YYYY-MM-DDThh:mm:ssZ\'.')

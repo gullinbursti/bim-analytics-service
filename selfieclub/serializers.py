@@ -8,7 +8,7 @@ from bimcore.validators.member import validate_cohort_date
 from bimcore.validators.member import validate_cohort_week
 from bimcore.validators.member import validate_member_id
 from bimcore.validators.member import validate_member_name
-from bimcore.validators.time import validate_utc_offset
+from bimcore.validators.time import validate_utc_offset, validate_utc_iso8601
 from bimcore.validators import validate_not_white_space_padded, \
     validate_not_none, validate_guid, validate_locale_code
 from django.core.exceptions import ValidationError
@@ -159,7 +159,7 @@ class DeviceSerializer(serializers.Serializer):
 
     def validate_time(self, attrs, source):
         """Validate time."""
-        validate_device_time(attrs[source])
+        validate_utc_iso8601(attrs[source])
         return attrs
 
     def validate_tz(self, attrs, source):
