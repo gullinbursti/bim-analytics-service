@@ -9,7 +9,7 @@ from bimcore.validators.member import validate_cohort_week
 from bimcore.validators.member import validate_member_id
 from bimcore.validators.member import validate_member_name
 from bimcore.validators import validate_not_white_space_padded, \
-    validate_not_none
+    validate_not_none, validate_guid
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from rest_framework import serializers
@@ -150,7 +150,7 @@ class DeviceSerializer(serializers.Serializer):
 
     def validate_adid(self, attrs, source):
         """Validate adid."""
-        validate_device_adid(attrs[source])
+        validate_guid(attrs[source])
         return attrs
 
     def validate_token(self, attrs, source):

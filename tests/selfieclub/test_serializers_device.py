@@ -43,7 +43,7 @@ class TestDeviceDeserialization(object):
 
     @pytest.mark.parametrize(
         ('field_name', 'validator'),
-        [('adid', 'selfieclub.serializers.validate_device_adid'),
+        [('adid', 'selfieclub.serializers.validate_guid'),
          ('locale', 'selfieclub.serializers.validate_device_locale'),
          ('time', 'selfieclub.serializers.validate_device_time'),
          ('token', 'selfieclub.serializers.validate_device_token'),
@@ -434,7 +434,7 @@ def test_validate_user_agent_none(device_test_data):
 
 DEVICE_GOOD_JSON = u"""
 {
-    "adid": "TODO - fix adid",
+    "adid": "558D52FD-8B0A-4850-ADF4-FBC522D29F39",
     "battery_per": 57.6789,
     "cpu": 93.19216,
     "pixel_density": 157,

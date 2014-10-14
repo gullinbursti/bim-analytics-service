@@ -2,6 +2,10 @@
 
 from __future__ import absolute_import
 
+__all__ = ('FieldTestValues',
+           'DataGenerator',
+           'GuidTestValues',)
+
 
 class FieldTestValues(object):
 
@@ -58,3 +62,31 @@ class DataGenerator(object):
                     'data': bad_copy,
                     'expected_bad': set([key])})
         return combinations
+
+
+class GuidTestValues(FieldTestValues):
+
+    """Contains test values for member IDs."""
+
+    all_good_values = (
+        'DBE8FCC9-5341-43F7-B30A-6F7E6893243F',
+        '5D844F1C-11D9-4696-B7C1-79412B3E4A12',
+        'C881DCFE-48A5-4B1E-80B2-A00FF862D759',
+        '3D0A67AB-8C58-4C3C-87BA-077C015585B9',
+        'C71961C7-BD15-4F60-AFC4-80E085780789',
+        '1F52C3B4-7AFC-4F80-A7BC-65C473D8B6AF',
+        'D2098FEE-D09C-4844-B0DD-B4A9705FAC7D',
+        )
+    all_bad_values = (
+        None,
+        '',
+        ' '*36,
+        '3d103ca0-367e-4028-9a55-9e88ed2eb1a3',              # all lower
+        '02dE4D17-AD5B-494D-B15F-54C397C93F41',              # one lower
+        '02DE4D17AD5B494DB15F54C397C93F41',                  # missing dash (-)
+        '{8D9B8FB8-8B0B-4453-B4A0-F2A2D799A824}',            # with curlies
+        '\n3005E60A-5711-416C-BDC6-EFCF9640B1C1',            # padding
+        '\t3005E60A-5711-416C-BDC6-EFCF9640B1C1',            # ^
+        ' 3005E60A-5711-416C-BDC6-EFCF9640B1C1 ',            # ^
+        '3005E60A-5711-416C-BDC6-EFCF9640B1C1EFCF9640B1C1',  # too long
+        )

@@ -5,12 +5,13 @@ from __future__ import absolute_import
 __all__ = ('DecimalValidator',
            'IntegerValidator',
            'ExactLengthValidator',
+           'validate_guid',
            'validate_not_string',
            'validate_not_white_space_padded',
            'validate_not_none')
 
 from django.core.exceptions import ValidationError
-from django.core.validators import BaseValidator
+from django.core.validators import BaseValidator, RegexValidator
 from django.utils.translation import ugettext_lazy
 import sys
 from decimal import Decimal
@@ -32,6 +33,23 @@ def validate_not_string(value):
     """Validate that the value is not a string."""
     if isinstance(value, str):
         raise ValidationError('String value not allowed.')
+
+
+def validate_guid(value):
+    """Validate that we have a valid GUID.
+
+    GUIDs are expected to be in the form of:
+        F53137B7-8220-4F20-A45D-C9D30F87A601
+
+    Note that all caps is manditory.
+    """
+    validate_not_none(value)
+    (ExactLengthValidator(36))(value)
+    regex = r'^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$'
+    (RegexValidator(
+        regex=regex,
+        message='GUID must be all caps, and in the form of: '
+                'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'))(value)
 
 
 class ExactLengthValidator(BaseValidator):
