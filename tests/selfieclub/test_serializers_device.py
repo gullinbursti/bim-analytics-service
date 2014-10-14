@@ -41,6 +41,9 @@ class TestDeviceDeserialization(object):
 
     """Testing the Deserialization with MemberSerializer."""
 
+    # TODO: get rid of this, and actually perform direct tesing.  Do not
+    # assume that the serializer is calling the correct methods.  It could
+    # easily be calling something else.
     @pytest.mark.parametrize(
         ('field_name', 'validator'),
         [('adid', 'selfieclub.serializers.validate_guid'),
