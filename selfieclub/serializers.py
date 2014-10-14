@@ -74,7 +74,6 @@ class DeviceSerializer(serializers.Serializer):
     resolution_x = serializers.IntegerField(required=True)
     resolution_y = serializers.IntegerField(required=True)
     time = serializers.CharField(required=True)
-    token = serializers.CharField(required=True)
     tz = serializers.CharField(required=True)  # pylint: disable=invalid-name
     user_agent = serializers.CharField(required=False)
 
@@ -96,7 +95,6 @@ class DeviceSerializer(serializers.Serializer):
             resolution_x=attrs['resolution_x'],
             resolution_y=attrs['resolution_y'],
             time=attrs['time'],
-            token=attrs['token'],
             tz_=attrs['tz'],
             user_agent=attrs['user_agent'])
 
@@ -151,11 +149,6 @@ class DeviceSerializer(serializers.Serializer):
     def validate_adid(self, attrs, source):
         """Validate adid."""
         validate_guid(attrs[source])
-        return attrs
-
-    def validate_token(self, attrs, source):
-        """Validate token."""
-        validate_device_token(attrs[source])
         return attrs
 
     def validate_locale(self, attrs, source):

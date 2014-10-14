@@ -46,7 +46,6 @@ class TestDeviceDeserialization(object):
         [('adid', 'selfieclub.serializers.validate_guid'),
          ('locale', 'selfieclub.serializers.validate_device_locale'),
          ('time', 'selfieclub.serializers.validate_device_time'),
-         ('token', 'selfieclub.serializers.validate_device_token'),
          ('tz', 'selfieclub.serializers.validate_device_tz')])
     def test_calls_validator(self, device_test_data, field_name, validator):
         """Make sure that the proper validator has been called.
@@ -448,7 +447,6 @@ DEVICE_GOOD_JSON = u"""
     "resolution_x": 768,
     "resolution_y": 1024,
     "time": "TODO - fix time",
-    "token": "TODO - fix token",
     "tz": "TODO - fix tz",
     "user_agent": "Apple-iPhone5C2/1001.525"
 }
