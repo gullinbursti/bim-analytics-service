@@ -44,7 +44,7 @@ class TestDeviceDeserialization(object):
     @pytest.mark.parametrize(
         ('field_name', 'validator'),
         [('adid', 'selfieclub.serializers.validate_guid'),
-         ('locale', 'selfieclub.serializers.validate_device_locale'),
+         ('locale', 'selfieclub.serializers.validate_locale_code'),
          ('time', 'selfieclub.serializers.validate_device_time'),
          ('tz', 'selfieclub.serializers.validate_utc_offset')])
     def test_calls_validator(self, device_test_data, field_name, validator):
@@ -439,7 +439,7 @@ DEVICE_GOOD_JSON = u"""
     "pixel_density": 157,
     "hardware_make": "Apple",
     "hardware_model": "iPhone 4s",
-    "locale": "TODO - fix locale",
+    "locale": "en_us",
     "orientation": "portrait",
     "orientation_deg": 0,
     "os": "ios",

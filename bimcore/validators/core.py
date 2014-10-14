@@ -6,12 +6,14 @@ __all__ = ('DecimalValidator',
            'IntegerValidator',
            'ExactLengthValidator',
            'validate_guid',
+           'validate_locale_code',
            'validate_not_string',
            'validate_not_white_space_padded',
            'validate_not_none')
 
 from django.core.exceptions import ValidationError
-from django.core.validators import BaseValidator, RegexValidator
+from django.core.validators import BaseValidator, RegexValidator, \
+    MaxLengthValidator
 from django.utils.translation import ugettext_lazy
 import sys
 from decimal import Decimal
@@ -50,6 +52,18 @@ def validate_guid(value):
         regex=regex,
         message='GUID must be all caps, and in the form of: '
                 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'))(value)
+
+
+def validate_locale_code(value):
+    """Validate locale.
+
+    Should be in the form of 'en_us'.
+    """
+    validate_not_none(value)
+    (MaxLengthValidator(32))(value)
+    (RegexValidator(
+        regex=r'^[a-z0-9_]+$',
+        message='Locale expected to be either \'xx\', or \'xx_yy\''))(value)
 
 
 class ExactLengthValidator(BaseValidator):

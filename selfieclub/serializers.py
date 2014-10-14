@@ -10,7 +10,7 @@ from bimcore.validators.member import validate_member_id
 from bimcore.validators.member import validate_member_name
 from bimcore.validators.time import validate_utc_offset
 from bimcore.validators import validate_not_white_space_padded, \
-    validate_not_none, validate_guid
+    validate_not_none, validate_guid, validate_locale_code
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from rest_framework import serializers
@@ -154,7 +154,7 @@ class DeviceSerializer(serializers.Serializer):
 
     def validate_locale(self, attrs, source):
         """Validate locale."""
-        validate_device_locale(attrs[source])
+        validate_locale_code(attrs[source])
         return attrs
 
     def validate_time(self, attrs, source):

@@ -4,7 +4,8 @@ from __future__ import absolute_import
 
 __all__ = ('FieldTestValues',
            'DataGenerator',
-           'GuidTestValues',)
+           'GuidTestValues',
+           'LocaleCodeTestValues')
 
 
 class FieldTestValues(object):
@@ -66,7 +67,7 @@ class DataGenerator(object):
 
 class GuidTestValues(FieldTestValues):
 
-    """Contains test values for member IDs."""
+    """Contains test values for GUIDs."""
 
     all_good_values = (
         'DBE8FCC9-5341-43F7-B30A-6F7E6893243F',
@@ -89,4 +90,30 @@ class GuidTestValues(FieldTestValues):
         '\t3005E60A-5711-416C-BDC6-EFCF9640B1C1',            # ^
         ' 3005E60A-5711-416C-BDC6-EFCF9640B1C1 ',            # ^
         '3005E60A-5711-416C-BDC6-EFCF9640B1C1EFCF9640B1C1',  # too long
+        )
+
+
+class LocaleCodeTestValues(FieldTestValues):
+
+    """Contains test values locale codes."""
+
+    # Pulled from: https://gist.github.com/jacobbubu/1836273
+    all_good_values = (
+        'mr', 'bs', 'ee_tg', 'ms', 'kam_ke', 'mt', 'ha', 'es_hn', 'ml_in',
+        'ro_md', 'kab_dz', 'he', 'es_co', 'my', 'es_pa', 'az_latn', 'mer',
+        'en_nz', 'xog_ug', 'sg', 'fr_gp', 'sr_cyrl_ba', 'hi', 'fil_ph',
+        'lt_lt', 'si', 'en_mt', 'si_lk', 'luo_ke', 'it_ch', 'teo', 'mfe', 'sk',
+        'uz_cyrl_uz', 'sl', 'rm_ch', 'az_cyrl_az', 'fr_gq', 'kde', 'sn',
+        'cgg_ug', 'es_419', 'so', 'a'*32)
+    all_bad_values = (
+        None,
+        '',
+        'g'*33,            # too long
+        'CGG_UG',          # upper case
+        '  en_us',         # padded
+        'en_us ',          # ^
+        'en_us ',          # ^
+        '   en_us ',       # ^
+        '\ten_us',         # ^
+        '\ren_us',         # ^
         )
