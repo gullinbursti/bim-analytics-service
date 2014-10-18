@@ -1,6 +1,6 @@
 """Setup script for the BIM Analytics Service."""
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 setup(
@@ -11,6 +11,8 @@ setup(
     author='Pedro H <pedro@builtinmenlo.com>, '
            'Phillip Winn <phillip@builtinmenlo.com>',
     author_email='pedro@builtinmenlo.com',
+    packages=find_packages('src'),
+    package_dir={'': 'src'},
     install_requires=[
         'Django>=1.6.5',
         'MySQL-python>=1.2.5',
