@@ -52,6 +52,7 @@ Thumbs.db
 __pycache__/
 /.virtualenv/
 /.tox/
+/.pdbrc
 
 # Editor temp files #
 #####################
