@@ -11,13 +11,19 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 import sys
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if 'BIMANALYTICS_CONFIG_DIR' in os.environ:
-    CONFIG_DIR = os.environ.get('BIMANALYTICS_CONFIG_DIR')
-else:
-    CONFIG_DIR = os.path.join(os.path.dirname(BASE_DIR), 'bimanalytics-config')
-sys.path.append(CONFIG_DIR)
+
+# Fail fast, fail often, and fail by design!!!  Make it clear that
+# BIMANALYTICS_CONFIG_DIR must be set.
+CONFIG_DIR = os.environ.get('BIMANALYTICS_CONFIG_DIR', None)
+if not CONFIG_DIR:
+    raise Exception('BIMANALYTICS_CONFIG_DIR not set!')
+elif not os.path.isdir(CONFIG_DIR):
+    raise Exception('BIMANALYTICS_CONFIG_DIR set to a directory that does '
+                    'not exist: {}'.format(CONFIG_DIR))
+elif CONFIG_DIR not in sys.path:
+    # pylint: disable=superfluous-parens
+    print('Appending \'{}\' to sys.path.'.format(CONFIG_DIR))
+    sys.path.append(CONFIG_DIR)
 
 
 # Quick-start development settings - unsuitable for production
@@ -85,7 +91,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+# STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Celery configuration
 CELERY_ACCEPT_CONTENT = ['json']
@@ -95,4 +101,10 @@ CELERY_RESULT_SERIALIZER = 'json'
 # Things that need to be in 'local_settings':
 #     - SECRET_KEY
 #     - AWS_CREDENTIALS
-from local_settings import *  # noqa # pylint: disable=wildcard-import, import-error
+try:
+    from local_settings import *  # noqa # pylint: disable=wildcard-import, import-error
+except ImportError as original:
+    raise ImportError(
+        original,
+        'There were issues importing local_settings.py.  Are you sure it is '
+        'in BIMANALYTICS_CONFIG_DIR\'s \'{}\' directory?'.format(CONFIG_DIR))
