@@ -5,7 +5,25 @@
 
 # Python code to execute, usually for sys.path manipulation such as
 # pygtk.require().
-#init-hook=
+#
+# This hook checks the current working directory (CWD), and the directory
+# $PYLINTRC is in for a 'src' directory.  First one that has it gets prefixed
+# to sys.path.
+#
+# Why do this?  tox/pylint was getting confused with what to check.
+#
+# NOTE: This code is tricky.  You have to keep things to single lines, else
+# things start to break quickly.
+init-hook=
+    import sys
+    import os
+    from os import path as _
+    from_cwd = _.join(_.abspath(os.getcwd()), 'src')
+    from_env = _.join(_.dirname(_.abspath(os.environ['PYLINTRC'])), 'src') if 'PYLINTRC' in os.environ else None
+    target = next((x for x in [from_cwd, from_env] if x and os.path.isdir(x)), None)
+    if not target: raise Exception('pylintrc\'s init-hook was unable to find \'src\' directory relative to CWD, or PYLINTRC.')
+    print('pylintrc\'s init-hook is prefixing \'{}\' to sys.path.'.format(target))
+    if target not in sys.path: sys.path.insert(0, target)
 
 # Profiled execution.
 profile=no

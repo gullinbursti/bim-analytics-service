@@ -33,7 +33,6 @@ def device_test_data():
     return data
 
 
-@pytest.mark.usefixtures("django_setup")
 class TestDeviceDeserialization(object):
     # pylint: disable=no-self-use, no-value-for-parameter, no-member
     # pylint: disable=unexpected-keyword-arg, redefined-outer-name
@@ -69,7 +68,6 @@ class TestDeviceDeserialization(object):
 # -----------------------------------------------------------------------------
 # resolution_x & resolution_y
 # -----------------------------------------------------------------------------
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize("value", RESOLUTION_VALUES_GOOD)
 def test_validate_resolution_y_with_good_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
@@ -82,7 +80,6 @@ def test_validate_resolution_y_with_good_values(device_test_data, value):
     assert value == serializer.object.resolution_y
 
 
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize("value", RESOLUTION_VALUES_BAD)
 def test_validate_resolution_y_with_bad_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
@@ -94,7 +91,6 @@ def test_validate_resolution_y_with_bad_values(device_test_data, value):
     assert not set(['resolution_y']) - set(serializer.errors.keys())
 
 
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize("value", RESOLUTION_VALUES_GOOD)
 def test_validate_resolution_x_with_good_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
@@ -107,7 +103,6 @@ def test_validate_resolution_x_with_good_values(device_test_data, value):
     assert value == serializer.object.resolution_x
 
 
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize("value", RESOLUTION_VALUES_BAD)
 def test_validate_resolution_x_with_bad_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
@@ -122,7 +117,6 @@ def test_validate_resolution_x_with_bad_values(device_test_data, value):
 # -----------------------------------------------------------------------------
 # battery_per
 # -----------------------------------------------------------------------------
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize("value", PERCENTAGE_VALUES_BAD)
 def test_validate_battery_per_with_bad_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
@@ -134,7 +128,6 @@ def test_validate_battery_per_with_bad_values(device_test_data, value):
     assert not set(['battery_per']) - set(serializer.errors.keys())
 
 
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize("value", PERCENTAGE_VALUES_GOOD)
 def test_validate_battery_per_with_good_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
@@ -150,7 +143,6 @@ def test_validate_battery_per_with_good_values(device_test_data, value):
 # -----------------------------------------------------------------------------
 # cpu
 # -----------------------------------------------------------------------------
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize("value", PERCENTAGE_VALUES_BAD)
 def test_validate_cpu_with_bad_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
@@ -162,7 +154,6 @@ def test_validate_cpu_with_bad_values(device_test_data, value):
     assert not set(['cpu']) - set(serializer.errors.keys())
 
 
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize("value", PERCENTAGE_VALUES_GOOD)
 def test_validate_cpu_with_good_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
@@ -178,7 +169,6 @@ def test_validate_cpu_with_good_values(device_test_data, value):
 # -----------------------------------------------------------------------------
 # pixel_density
 # -----------------------------------------------------------------------------
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize("value", (None, '', 0, -1, 1024*10+1, 'some_string'))
 def test_validate_pixel_density_with_bad_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
@@ -190,7 +180,6 @@ def test_validate_pixel_density_with_bad_values(device_test_data, value):
     assert not set(['pixel_density']) - set(serializer.errors.keys())
 
 
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize("value", (1, 1024*10))
 def test_validate_pixel_density_with_good_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
@@ -206,7 +195,6 @@ def test_validate_pixel_density_with_good_values(device_test_data, value):
 # -----------------------------------------------------------------------------
 # os
 # -----------------------------------------------------------------------------
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize(
     "value", (None, '', '\t', '\niOS', 'Ios', ' ios', ' ios  ', 'a'*9,
               'Android', 'android '))
@@ -220,7 +208,6 @@ def test_validate_os_with_bad_values(device_test_data, value):
     assert not set(['os']) - set(serializer.errors.keys())
 
 
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize("value", ('ios', 'android'))
 def test_validate_os_with_good_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
@@ -236,7 +223,6 @@ def test_validate_os_with_good_values(device_test_data, value):
 # -----------------------------------------------------------------------------
 # hardware_make
 # -----------------------------------------------------------------------------
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize(
     "value", (None, '', 'y', 'z'*65, 'Apple   ', ' Apple', ' Samsung '))
 def test_validate_hardware_make_with_bad_values(device_test_data, value):
@@ -249,7 +235,6 @@ def test_validate_hardware_make_with_bad_values(device_test_data, value):
     assert not set(['hardware_make']) - set(serializer.errors.keys())
 
 
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize("value", ('HTC', 'Samsung', 'Apple', 'AB', 'a'*64))
 def test_validate_hardware_make_with_good_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
@@ -265,7 +250,6 @@ def test_validate_hardware_make_with_good_values(device_test_data, value):
 # -----------------------------------------------------------------------------
 # hardware_model
 # -----------------------------------------------------------------------------
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize(
     "value", (None, '', 'y', 't'*65, '\niPhone 5 ', ' iPhone 5', '\tiPhone 5',
               'a'))
@@ -279,7 +263,6 @@ def test_validate_hardware_model_with_bad_values(device_test_data, value):
     assert not set(['hardware_model']) - set(serializer.errors.keys())
 
 
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize(
     "value", ('iPhone 5', 'iPhone 6plus', 'Galaxy S', 'Galaxy S II',
               'Galaxy S5', 'GT-I9300', 'gH', 'r'*64))
@@ -297,7 +280,6 @@ def test_validate_hardware_model_with_good_values(device_test_data, value):
 # -----------------------------------------------------------------------------
 # os_version
 # -----------------------------------------------------------------------------
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize(
     "value", (None, '', 'g', '   8.0.2', '8.0.2\n', 'r'*33))
 def test_validate_os_version_with_bad_values(device_test_data, value):
@@ -310,7 +292,6 @@ def test_validate_os_version_with_bad_values(device_test_data, value):
     assert not set(['os_version']) - set(serializer.errors.keys())
 
 
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize(
     "value", ('8.0.2', '7.1.1', '7.1', '2.3.7', '4.4.4', '1.1', 'b'*32))
 def test_validate_os_version_with_good_values(device_test_data, value):
@@ -327,7 +308,6 @@ def test_validate_os_version_with_good_values(device_test_data, value):
 # -----------------------------------------------------------------------------
 # orientation
 # -----------------------------------------------------------------------------
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize(
     "value", (None, '', '\nportrait', 'portrait\r', 'portrait   ',
               'Landscape'))
@@ -341,7 +321,6 @@ def test_validate_orientation_with_bad_values(device_test_data, value):
     assert not set(['orientation']) - set(serializer.errors.keys())
 
 
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize("value", ('landscape', 'portrait'))
 def test_validate_orientation_with_good_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
@@ -357,7 +336,6 @@ def test_validate_orientation_with_good_values(device_test_data, value):
 # -----------------------------------------------------------------------------
 # orientation_deg
 # -----------------------------------------------------------------------------
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize("value", (None, '', -1, 91, 'some_string'))
 def test_validate_orientation_deg_with_bad_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
@@ -369,7 +347,6 @@ def test_validate_orientation_deg_with_bad_values(device_test_data, value):
     assert not set(['orientation_deg']) - set(serializer.errors.keys())
 
 
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize("value", (0, 90, 180, 270))
 def test_validate_orientation_deg_with_good_values(device_test_data, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
@@ -385,7 +362,6 @@ def test_validate_orientation_deg_with_good_values(device_test_data, value):
 # -----------------------------------------------------------------------------
 # user_agent
 # -----------------------------------------------------------------------------
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize("value", ('g'*2049, 'Apple-iPhone2C1/901.334 ',
                                    '\nApple-iPhone2C1/901.334'))
 def test_validate_user_agent_with_bad_values(device_test_data, value):
@@ -398,7 +374,6 @@ def test_validate_user_agent_with_bad_values(device_test_data, value):
     assert not set(['user_agent']) - set(serializer.errors.keys())
 
 
-@pytest.mark.usefixtures("django_setup")
 @pytest.mark.parametrize(
     "value", (
         '',
@@ -422,7 +397,6 @@ def test_validate_user_agent_with_good_values(device_test_data, value):
     assert value == serializer.object.user_agent
 
 
-@pytest.mark.usefixtures("django_setup")
 def test_validate_user_agent_none(device_test_data):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member

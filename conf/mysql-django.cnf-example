@@ -1,0 +1,7 @@
+# Use by Django to maintain session, and account information
+[client]
+database              =  # TODO - fill in value
+user                  =  # TODO - fill in value
+password              =  # TODO - fill in value
+host                  =  # TODO - fill in value
+default-character-set = utf8

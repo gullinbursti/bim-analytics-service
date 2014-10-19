@@ -25,7 +25,6 @@ def member_test_data():
     return data
 
 
-@pytest.mark.usefixtures("django_setup")
 class TestMemberDeserialization(object):
     # pylint: disable=no-self-use, no-value-for-parameter, no-member
     # pylint: disable=unexpected-keyword-arg, redefined-outer-name

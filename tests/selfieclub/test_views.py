@@ -5,10 +5,8 @@ from mock import patch
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
 from selfieclub.views import EventView
-import pytest
 
 
-@pytest.mark.usefixtures("django_setup")
 class TestEventView(object):
     # pylint: disable=no-self-use, unused-argument, too-few-public-methods
 

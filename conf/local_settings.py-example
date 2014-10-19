@@ -1,0 +1,70 @@
+from __future__ import absolute_import
+# ^^^ The above is required if you want to import from the celery
+# library.  If you don't have this then `from celery.schedules import`
+# becomes `proj.celery.schedules` in Python 2.x since it allows
+# for relative imports by default.
+
+import os
+from bimanalytics.settings import BASE_DIR
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+TEMPLATE_DEBUG = True
+
+# -----------------------------------------------------------------------------
+# Celery settings
+rabbitmq_user =   # TODO - fill in value
+rabbitmq_passwd = # TODO - fill in value
+rabbitmq_host =   # TODO - fill in value
+BROKER_URL = "amqp://{}:{}@{}//".format(
+    rabbitmq_user, rabbitmq_passwd, rabbitmq_host)
+
+# -----------------------------------------------------------------------------
+# Django
+SECRET_KEY =      # TODO - fill in value
+
+# -----------------------------------------------------------------------------
+# Application specific
+
+# -----------------------------------------------------------------------------
+# Logging
+# LOGGING = {
+#    'version': 1,
+#    'disable_existing_loggers': False,
+#    'formatters': {
+#        'verbose': {
+#            'format': '%(asctime)s %(levelname)s %(name)s %(process)d %(thread)d %(message)s'  # noqa
+#        },
+#        'simple': {
+#            'format': '%(levelname)s %(message)s'
+#        },
+#    },
+#    'handlers': {
+#        # Log to a text file that can be rotated by logrotate
+#        'logfile': {
+#            'class': 'logging.handlers.WatchedFileHandler',
+#            'filename': os.path.join(BASE_DIR, "bimanalytics.log"),
+#            'formatter': 'verbose',
+#        },
+#       'console': {
+#            'level': 'DEBUG',
+#            'class': 'logging.StreamHandler',
+#            'formatter': 'simple'
+#        },
+#    },
+#    'loggers': {
+#        # Your own app - this assumes all your logger names start with
+#        # "myapp."
+#        'celery': {
+#            'handlers': ['logfile', 'console'],
+#            'level': 'DEBUG',
+#            'propagate': False
+#        },
+#        # Might as well log any errors anywhere else in Django
+#        'django': {
+#            'handlers': ['logfile'],
+#            'level': 'DEBUG',
+#            'propagate': False,
+#        },
+#    },
+# }
