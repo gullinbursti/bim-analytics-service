@@ -29,6 +29,7 @@ scp -o "$ssh_proxy" "$package_path" "bin/deploy-remote.sh" "$remote_host:."
 ssh -o "$ssh_proxy" "$remote_host" <<EOC
     set -o xtrace
     set -o errexit
+    test ! -d "$remote_tmp_dir" || exit 1
     mkdir -pv "$remote_tmp_dir"
 EOC
 
