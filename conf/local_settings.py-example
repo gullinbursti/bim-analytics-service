@@ -5,7 +5,6 @@ from __future__ import absolute_import
 # for relative imports by default.
 
 import os
-from bimanalytics.settings import BASE_DIR
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
