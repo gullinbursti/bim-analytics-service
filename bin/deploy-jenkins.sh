@@ -16,3 +16,9 @@ echo "--------------------------------------------------------------------------
 mkdir "$dist_dir"  # We want the build to fail if `dist_dir` exists!!!
 ./setup.py sdist --dist-dir "$dist_dir"
 package_path=$(ls -1 $dist_dir/bimanalytics-*.tar.gz | sort -u | tail -1)
+
+ssh_proxy='ProxyCommand ssh bim-deploy@bastion.selfieclubapp.com nc -q0 %h %p 2> /dev/null'
+remote_host='bim-deploy@api00.devint.selfieclubapp.com'
+remote_dir=''
+
+scp -o "$ssh_proxy" "$package_path" "$remote_host:."
