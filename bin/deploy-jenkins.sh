@@ -26,4 +26,9 @@ echo "--------------------------------------------------------------------------
 echo "- *LOCAL* Shipping: $build_id"
 echo "-------------------------------------------------------------------------------"
 scp -o "$ssh_proxy" "$package_path" "bin/deploy-remote.sh" "$remote_host:."
-ssh -o "$ssh_proxy" "$remote_host" mkdir -p "$remote_tmp_dir"
+ssh -o "$ssh_proxy" "$remote_host" <<EOC
+    set -o errexit
+    mkdir -pv "$remote_tmp_dir"
+EOC
+
+
