@@ -28,7 +28,7 @@ echo "--------------------------------------------------------------------------
 mkdir -p "$install_dir"
 virtualenv --python=python2.7 "$install_dir"
 "$pip_cmd" install -U pip
-"$pip_cmd" install "$package_path"
+"$pip_cmd" install "$package_path/sdkjfh"
 (cd "$install_dir" && "$django_admin_cmd" collectstatic --noinput)
 ln -fsnv "$install_dir" "$link_path"
 sudo /usr/sbin/service apache2 restart
