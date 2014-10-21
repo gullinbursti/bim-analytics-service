@@ -10,7 +10,7 @@ dist_dir="dist-$build_id"
 
 echo ""
 echo "-------------------------------------------------------------------------------"
-echo "- Building: $build_id"
+echo "- *LOCAL* Building: $build_id"
 echo "-------------------------------------------------------------------------------"
 # The following can be done outside of a virtualenv
 mkdir "$dist_dir"  # We want the build to fail if `dist_dir` exists!!!
@@ -21,4 +21,8 @@ ssh_proxy='ProxyCommand ssh bim-deploy@bastion.selfieclubapp.com nc -q0 %h %p 2>
 remote_host='bim-deploy@api00.devint.selfieclubapp.com'
 remote_dir=''
 
-scp -o "$ssh_proxy" "$package_path" "$remote_host:."
+echo ""
+echo "-------------------------------------------------------------------------------"
+echo "- *LOCAL* Shipping: $build_id"
+echo "-------------------------------------------------------------------------------"
+scp -o "$ssh_proxy" "$package_path" "bin/deploy-remote.sh" "$remote_host:."
