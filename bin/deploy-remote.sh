@@ -17,7 +17,7 @@ link_path='/opt/built-in-menlo/bimanalytics'
 
 echo ""
 echo "-------------------------------------------------------------------------------"
-echo "- *$(basename $0)* Deploying: $install_dir"
+echo "- *$(basename $0)* Deploying: $package_path ($build_id)"
 echo "-------------------------------------------------------------------------------"
 # Absolute path critical for honoring virtualenv in `pip_cmd` and
 # `django_admin_cmd`
