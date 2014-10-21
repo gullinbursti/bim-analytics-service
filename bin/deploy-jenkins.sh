@@ -16,7 +16,7 @@ dist_dir="dist-$build_id"
 
 echo ""
 echo "-------------------------------------------------------------------------------"
-echo "- *LOCAL* Building: $build_id"
+echo "- *$(basename $0)* Building: $build_id"
 echo "-------------------------------------------------------------------------------"
 # The following can be done outside of a virtualenv
 mkdir "$dist_dir"  # We want the build to fail if `dist_dir` exists!!!
@@ -30,7 +30,7 @@ remote_tmp_dir="/opt/built-in-menlo/tmp/bimanalytics/$build_id"
 
 echo ""
 echo "-------------------------------------------------------------------------------"
-echo "- *LOCAL* Shipping: $build_id"
+echo "- *$(basename $0)* Shipping: $build_id"
 echo "-------------------------------------------------------------------------------"
 ssh -o "$ssh_proxy" "$remote_host" <<EOC
     set -o xtrace
