@@ -67,3 +67,6 @@ SECRET_KEY =      # TODO - fill in value
 #        },
 #    },
 # }
+
+
+# vim: syntax=python
