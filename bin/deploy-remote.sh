@@ -1,5 +1,7 @@
 #! /bin/bash
 
+# This script is used by `deploy-jenkins.sh` on the server being deployed to.
+
 set -o xtrace
 set -o errexit
 set -o pipefail
