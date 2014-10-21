@@ -31,5 +31,5 @@ def pytest_configure(config):
     project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     os.environ.setdefault(
         'BIMANALYTICS_CONFIG_DIR',
-        os.path.join(project_dir, 'tests-config'))
+        os.path.join(project_dir, 'tests-conf'))
     django.setup()
