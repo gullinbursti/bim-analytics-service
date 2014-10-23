@@ -12,7 +12,7 @@ class TestEventView(object):
 
     """Testing the EventView."""
 
-    @patch('selfieclub.views.MemberSerializer')
+    @patch('selfieclub.views.AnalyticsEventSerializer')
     def test_posting_a_good_event(self, mock_serializer):
         """Just check to make sure that the serializer is being used.
 
@@ -33,7 +33,7 @@ class TestEventView(object):
         assert status.HTTP_200_OK == response.status_code
         assert not response.data
 
-    @patch('selfieclub.views.MemberSerializer')
+    @patch('selfieclub.views.AnalyticsEventSerializer')
     def test_posting_a_bad_event(self, mock_serializer):
         """Just check to make sure that the serializer is being used.
 

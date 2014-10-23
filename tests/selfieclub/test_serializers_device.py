@@ -17,8 +17,7 @@ PERCENTAGE_VALUES_GOOD = (Decimal(0), Decimal(100), Decimal(0.00000),
 PERCENTAGE_VALUES_BAD = (None, '', -1, -0.00001, 100.000001, 'hello')
 
 
-@pytest.fixture(scope='function')
-def device_test_data():
+def get_device_test_data():
     # pylint: disable=function-redefined, global-variable-undefined
     # pylint: disable=invalid-name, unnecessary-lambda, redefined-outer-name
     """Return a copy of device test data.
@@ -28,8 +27,8 @@ def device_test_data():
     """
     stream = StringIO(DEVICE_GOOD_JSON)
     data = JSONParser().parse(stream)
-    global device_test_data
-    device_test_data = lambda: data.copy()
+    global get_device_test_data
+    get_device_test_data = lambda: data.copy()
     return data
 
 
@@ -49,12 +48,13 @@ class TestDeviceDeserialization(object):
          ('locale', 'selfieclub.serializers.validate_locale_code'),
          ('time', 'selfieclub.serializers.validate_utc_iso8601'),
          ('tz', 'selfieclub.serializers.validate_utc_offset')])
-    def test_calls_validator(self, device_test_data, field_name, validator):
+    def test_calls_validator(self, field_name, validator):
         """Make sure that the proper validator has been called.
 
         Also makes certain that the the ValidationError() exception is being
         listened to.
         """
+        device_test_data = get_device_test_data()
         with patch(validator) as patched:
             patched.side_effect = ValidationError(
                 'Fake validation error in unit testing.', 'boo')
@@ -69,10 +69,11 @@ class TestDeviceDeserialization(object):
 # resolution_x & resolution_y
 # -----------------------------------------------------------------------------
 @pytest.mark.parametrize("value", RESOLUTION_VALUES_GOOD)
-def test_validate_resolution_y_with_good_values(device_test_data, value):
+def test_validate_resolution_y_with_good_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['resolution_y'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert serializer.is_valid(), serializer.errors
@@ -81,10 +82,11 @@ def test_validate_resolution_y_with_good_values(device_test_data, value):
 
 
 @pytest.mark.parametrize("value", RESOLUTION_VALUES_BAD)
-def test_validate_resolution_y_with_bad_values(device_test_data, value):
+def test_validate_resolution_y_with_bad_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['resolution_y'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert not serializer.is_valid()
@@ -92,10 +94,11 @@ def test_validate_resolution_y_with_bad_values(device_test_data, value):
 
 
 @pytest.mark.parametrize("value", RESOLUTION_VALUES_GOOD)
-def test_validate_resolution_x_with_good_values(device_test_data, value):
+def test_validate_resolution_x_with_good_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['resolution_x'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert serializer.is_valid(), serializer.errors
@@ -104,10 +107,11 @@ def test_validate_resolution_x_with_good_values(device_test_data, value):
 
 
 @pytest.mark.parametrize("value", RESOLUTION_VALUES_BAD)
-def test_validate_resolution_x_with_bad_values(device_test_data, value):
+def test_validate_resolution_x_with_bad_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['resolution_x'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert not serializer.is_valid()
@@ -118,10 +122,11 @@ def test_validate_resolution_x_with_bad_values(device_test_data, value):
 # battery_per
 # -----------------------------------------------------------------------------
 @pytest.mark.parametrize("value", PERCENTAGE_VALUES_BAD)
-def test_validate_battery_per_with_bad_values(device_test_data, value):
+def test_validate_battery_per_with_bad_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['battery_per'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert not serializer.is_valid()
@@ -129,10 +134,11 @@ def test_validate_battery_per_with_bad_values(device_test_data, value):
 
 
 @pytest.mark.parametrize("value", PERCENTAGE_VALUES_GOOD)
-def test_validate_battery_per_with_good_values(device_test_data, value):
+def test_validate_battery_per_with_good_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['battery_per'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert serializer.is_valid(), serializer.errors
@@ -144,10 +150,11 @@ def test_validate_battery_per_with_good_values(device_test_data, value):
 # cpu
 # -----------------------------------------------------------------------------
 @pytest.mark.parametrize("value", PERCENTAGE_VALUES_BAD)
-def test_validate_cpu_with_bad_values(device_test_data, value):
+def test_validate_cpu_with_bad_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['cpu'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert not serializer.is_valid()
@@ -155,10 +162,11 @@ def test_validate_cpu_with_bad_values(device_test_data, value):
 
 
 @pytest.mark.parametrize("value", PERCENTAGE_VALUES_GOOD)
-def test_validate_cpu_with_good_values(device_test_data, value):
+def test_validate_cpu_with_good_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['cpu'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert serializer.is_valid(), serializer.errors
@@ -170,10 +178,11 @@ def test_validate_cpu_with_good_values(device_test_data, value):
 # pixel_density
 # -----------------------------------------------------------------------------
 @pytest.mark.parametrize("value", (None, '', 0, -1, 1024*10+1, 'some_string'))
-def test_validate_pixel_density_with_bad_values(device_test_data, value):
+def test_validate_pixel_density_with_bad_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['pixel_density'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert not serializer.is_valid()
@@ -181,10 +190,11 @@ def test_validate_pixel_density_with_bad_values(device_test_data, value):
 
 
 @pytest.mark.parametrize("value", (1, 1024*10))
-def test_validate_pixel_density_with_good_values(device_test_data, value):
+def test_validate_pixel_density_with_good_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['pixel_density'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert serializer.is_valid(), serializer.errors
@@ -198,10 +208,11 @@ def test_validate_pixel_density_with_good_values(device_test_data, value):
 @pytest.mark.parametrize(
     "value", (None, '', '\t', '\niOS', 'Ios', ' ios', ' ios  ', 'a'*9,
               'Android', 'android '))
-def test_validate_os_with_bad_values(device_test_data, value):
+def test_validate_os_with_bad_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['os'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert not serializer.is_valid()
@@ -209,10 +220,11 @@ def test_validate_os_with_bad_values(device_test_data, value):
 
 
 @pytest.mark.parametrize("value", ('ios', 'android'))
-def test_validate_os_with_good_values(device_test_data, value):
+def test_validate_os_with_good_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['os'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert serializer.is_valid(), serializer.errors
@@ -225,10 +237,11 @@ def test_validate_os_with_good_values(device_test_data, value):
 # -----------------------------------------------------------------------------
 @pytest.mark.parametrize(
     "value", (None, '', 'y', 'z'*65, 'Apple   ', ' Apple', ' Samsung '))
-def test_validate_hardware_make_with_bad_values(device_test_data, value):
+def test_validate_hardware_make_with_bad_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['hardware_make'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert not serializer.is_valid()
@@ -236,10 +249,11 @@ def test_validate_hardware_make_with_bad_values(device_test_data, value):
 
 
 @pytest.mark.parametrize("value", ('HTC', 'Samsung', 'Apple', 'AB', 'a'*64))
-def test_validate_hardware_make_with_good_values(device_test_data, value):
+def test_validate_hardware_make_with_good_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['hardware_make'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert serializer.is_valid(), serializer.errors
@@ -253,10 +267,11 @@ def test_validate_hardware_make_with_good_values(device_test_data, value):
 @pytest.mark.parametrize(
     "value", (None, '', 'y', 't'*65, '\niPhone 5 ', ' iPhone 5', '\tiPhone 5',
               'a'))
-def test_validate_hardware_model_with_bad_values(device_test_data, value):
+def test_validate_hardware_model_with_bad_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['hardware_model'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert not serializer.is_valid()
@@ -266,10 +281,11 @@ def test_validate_hardware_model_with_bad_values(device_test_data, value):
 @pytest.mark.parametrize(
     "value", ('iPhone 5', 'iPhone 6plus', 'Galaxy S', 'Galaxy S II',
               'Galaxy S5', 'GT-I9300', 'gH', 'r'*64))
-def test_validate_hardware_model_with_good_values(device_test_data, value):
+def test_validate_hardware_model_with_good_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['hardware_model'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert serializer.is_valid(), serializer.errors
@@ -282,10 +298,11 @@ def test_validate_hardware_model_with_good_values(device_test_data, value):
 # -----------------------------------------------------------------------------
 @pytest.mark.parametrize(
     "value", (None, '', 'g', '   8.0.2', '8.0.2\n', 'r'*33))
-def test_validate_os_version_with_bad_values(device_test_data, value):
+def test_validate_os_version_with_bad_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['os_version'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert not serializer.is_valid()
@@ -294,10 +311,11 @@ def test_validate_os_version_with_bad_values(device_test_data, value):
 
 @pytest.mark.parametrize(
     "value", ('8.0.2', '7.1.1', '7.1', '2.3.7', '4.4.4', '1.1', 'b'*32))
-def test_validate_os_version_with_good_values(device_test_data, value):
+def test_validate_os_version_with_good_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['os_version'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert serializer.is_valid(), serializer.errors
@@ -311,10 +329,11 @@ def test_validate_os_version_with_good_values(device_test_data, value):
 @pytest.mark.parametrize(
     "value", (None, '', '\nportrait', 'portrait\r', 'portrait   ',
               'Landscape'))
-def test_validate_orientation_with_bad_values(device_test_data, value):
+def test_validate_orientation_with_bad_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['orientation'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert not serializer.is_valid()
@@ -322,10 +341,11 @@ def test_validate_orientation_with_bad_values(device_test_data, value):
 
 
 @pytest.mark.parametrize("value", ('landscape', 'portrait'))
-def test_validate_orientation_with_good_values(device_test_data, value):
+def test_validate_orientation_with_good_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['orientation'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert serializer.is_valid(), serializer.errors
@@ -337,10 +357,11 @@ def test_validate_orientation_with_good_values(device_test_data, value):
 # orientation_deg
 # -----------------------------------------------------------------------------
 @pytest.mark.parametrize("value", (None, '', -1, 91, 'some_string'))
-def test_validate_orientation_deg_with_bad_values(device_test_data, value):
+def test_validate_orientation_deg_with_bad_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['orientation_deg'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert not serializer.is_valid()
@@ -348,10 +369,11 @@ def test_validate_orientation_deg_with_bad_values(device_test_data, value):
 
 
 @pytest.mark.parametrize("value", (0, 90, 180, 270))
-def test_validate_orientation_deg_with_good_values(device_test_data, value):
+def test_validate_orientation_deg_with_good_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['orientation_deg'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert serializer.is_valid(), serializer.errors
@@ -364,10 +386,11 @@ def test_validate_orientation_deg_with_good_values(device_test_data, value):
 # -----------------------------------------------------------------------------
 @pytest.mark.parametrize("value", ('g'*2049, 'Apple-iPhone2C1/901.334 ',
                                    '\nApple-iPhone2C1/901.334'))
-def test_validate_user_agent_with_bad_values(device_test_data, value):
+def test_validate_user_agent_with_bad_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['user_agent'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert not serializer.is_valid()
@@ -376,7 +399,6 @@ def test_validate_user_agent_with_bad_values(device_test_data, value):
 
 @pytest.mark.parametrize(
     "value", (
-        '',
         'Apple-iPhone2C1/901.334',
         'Apple-iPhone5C2/1001.525',
         'Apple-iPod5C1/1001.523',
@@ -386,26 +408,16 @@ def test_validate_user_agent_with_bad_values(device_test_data, value):
         'Mozilla/5.0 (Linux; U; Android 2.3.5; zh-cn; HTC_IncredibleS_S710e Build/GRJ90) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1',  # noqa
         'Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19',  # noqa
         'a'*2048))
-def test_validate_user_agent_with_good_values(device_test_data, value):
+def test_validate_user_agent_with_good_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """TODO - add something."""
+    device_test_data = get_device_test_data()
     device_test_data['user_agent'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert serializer.is_valid(), serializer.errors
     assert not serializer.errors
     assert value == serializer.object.user_agent
-
-
-def test_validate_user_agent_none(device_test_data):
-    # pylint: disable=redefined-outer-name, unexpected-keyword-arg
-    # pylint: disable=no-value-for-parameter, no-member
-    """TODO - add something."""
-    device_test_data['user_agent'] = None
-    serializer = DeviceSerializer(data=device_test_data)
-    assert serializer.is_valid(), serializer.errors
-    assert not serializer.errors
-    assert '' == serializer.object.user_agent
 
 
 DEVICE_GOOD_JSON = u"""

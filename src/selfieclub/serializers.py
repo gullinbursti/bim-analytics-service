@@ -76,7 +76,7 @@ class DeviceSerializer(serializers.Serializer):
     resolution_y = serializers.IntegerField(required=True)
     time = serializers.CharField(required=True)
     tz = serializers.CharField(required=True)  # pylint: disable=invalid-name
-    user_agent = serializers.CharField(required=False)
+    user_agent = serializers.CharField(required=True)
 
     def restore_object(self, attrs, instance=None):
         """Given a dictionary of deserialized field values."""
@@ -198,4 +198,24 @@ class DeviceSerializer(serializers.Serializer):
         validate_not_none(attrs[source])
         (MaxLengthValidator(2048))(attrs[source])
         validate_not_white_space_padded(attrs[source])
+        return attrs
+
+
+class AnalyticsEventSerializer(serializers.Serializer):
+    # pylint: disable=too-few-public-methods, no-value-for-parameter
+    # pylint: disable=unexpected-keyword-arg, no-self-use
+
+    """Analytics event serializer."""
+
+    device = DeviceSerializer(required=True)
+    member = MemberSerializer(required=True)
+
+    def validate_device(self, attrs, source):
+        """Validate device."""
+        validate_not_none(attrs[source])
+        return attrs
+
+    def validate_member(self, attrs, source):
+        """Validate device."""
+        validate_not_none(attrs[source])
         return attrs
