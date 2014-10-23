@@ -1,6 +1,26 @@
 {
-   "cohort_date" : "2014-10-05",
-   "cohort_week" : "2014-32",
-   "name" : "user_name",
-   "id" : 92837492
+  "member": {
+    "cohort_date": "2014-10-05",
+    "cohort_week": "2014-32",
+    "name": "user_name",
+    "id": 92837492
+  },
+  "device": {
+    "adid": "558D52FD-8B0A-4850-ADF4-FBC522D29F39",
+    "battery_per": 57.6789,
+    "cpu": 93.19216,
+    "pixel_density": 157,
+    "hardware_make": "Apple",
+    "hardware_model": "iPhone 4s",
+    "locale": "en_us",
+    "orientation": "portrait",
+    "orientation_deg": 0,
+    "os": "ios",
+    "os_version": "7.1.2",
+    "resolution_x": 768,
+    "resolution_y": 1024,
+    "time": "2014-10-13T15:09:10Z",
+    "tz": "UTC-08:00",
+    "user_agent": "Apple-iPhone5C2/1001.525"
+  }
 }
