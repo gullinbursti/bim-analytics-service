@@ -22,5 +22,11 @@
     "time": "2014-10-13T15:09:10Z",
     "tz": "UTC-08:00",
     "user_agent": "Apple-iPhone5C2/1001.525"
+  },
+  "state_info": {
+    "cohort_date": "2014-10-05",
+    "cohort_week": "2014-32",
+    "name": "member_name",
+    "id": 92837492
   }
 }
