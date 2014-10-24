@@ -18,18 +18,9 @@ PERCENTAGE_VALUES_BAD = (None, '', -1, -0.00001, 100.000001, 'hello')
 
 
 def get_device_test_data():
-    # pylint: disable=function-redefined, global-variable-undefined
-    # pylint: disable=invalid-name, unnecessary-lambda, redefined-outer-name
-    """Return a copy of device test data.
-
-    This function uses closures, and redefines itself for efficency.  I am
-    also doing a bit of experimentation.
-    """
+    """Return a copy of device test data."""
     stream = StringIO(DEVICE_GOOD_JSON)
-    data = JSONParser().parse(stream)
-    global get_device_test_data
-    get_device_test_data = lambda: data.copy()
-    return data
+    return JSONParser().parse(stream)
 
 
 class TestDeviceDeserialization(object):

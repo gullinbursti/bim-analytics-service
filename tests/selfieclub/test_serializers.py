@@ -25,18 +25,9 @@ MEMBER_GOOD_JSON = u"""
 
 
 def get_member_test_data():
-    # pylint: disable=function-redefined, global-variable-undefined
-    # pylint: disable=invalid-name, unnecessary-lambda, redefined-outer-name
-    """Return a copy of Member test data.
-
-    This function uses closures, and redefines itself for efficency.  I am
-    also doing a bit of experimentation.
-    """
+    """Return a copy of Member test data."""
     stream = StringIO(MEMBER_GOOD_JSON)
-    data = JSONParser().parse(stream)
-    global get_member_test_data
-    get_member_test_data = lambda: data.copy()
-    return data
+    return JSONParser().parse(stream)
 
 
 class TestMemberDeserialization(object):
@@ -81,69 +72,6 @@ class TestMemberDeserialization(object):
 
 
 # -----------------------------------------------------------------------------
-# AnalyticsEventSerializer
-# -----------------------------------------------------------------------------
-@pytest.mark.parametrize(
-    'data', [
-        {'member': get_member_test_data()},
-        {'device': get_device_test_data()},
-        {}])
-def test_analyticseventserializer_has_missing_values(data):
-    # pylint: disable=no-value-for-parameter, no-member, unexpected-keyword-arg
-    """Confirm not vaild on missing required fields.
-
-    Making sure that missing required fields mark the serializer object as
-    invalid, and that they are listed in serializer.errors.
-    """
-    serializer = AnalyticsEventSerializer(data=data)
-    assert not serializer.is_valid()
-    for there in data.keys():
-        assert there not in serializer.errors.keys()
-
-
-@pytest.mark.parametrize(
-    'data', [
-        {'member': get_member_test_data(), 'device': None},
-        {'member': None, 'device': get_device_test_data()},
-        {'member': None, 'device': None}])
-def test_analyticseventserializer_has_none_values(data):
-    # pylint: disable=no-value-for-parameter, no-member, unexpected-keyword-arg
-    """Confirm not vaild on required fields set to None.
-
-    In this case we are making sure that required fields with `None` values
-    results in an invalid state.  We also make sure that the the
-    serializer.errors property contains a list of the None valued keys.
-    """
-    serializer = AnalyticsEventSerializer(data=data)
-    assert not serializer.is_valid()
-    # excpected bad keys == actual bad keys
-    assert set([key for key, value in data.items() if value is None]) \
-        == set(serializer.errors.keys())
-
-
-@pytest.mark.parametrize(
-    'data', [
-        {'member': get_member_test_data(), 'device': {}},
-        {'member': {}, 'device': get_device_test_data()},
-        {'member': {}, 'device': {}}])
-def test_analyticseventserializer_has_bad_values(data):
-    # pylint: disable=no-value-for-parameter, no-member, unexpected-keyword-arg
-    """Confirm that nested serializers are validated.
-
-    Cheating a bit by feeding in empty data (empty dict {}) into into the
-    fields being tested.  We confirm that serializer.errors flags the
-    appropriate bad flieds, as well as that the individual nested serialization
-    errors are sending back more than one error.
-    """
-    serializer = AnalyticsEventSerializer(data=data)
-    expected = set([key for key, value in data.items() if not value])
-    assert not serializer.is_valid()
-    assert expected == set(serializer.errors.keys())
-    for key in expected:
-        assert len(serializer.errors[key][0].keys()) > 1
-
-
-# -----------------------------------------------------------------------------
 # StateInfoSerializer
 # -----------------------------------------------------------------------------
 STATE_INFO_GOOD_JSON = u"""
@@ -169,18 +97,9 @@ STATE_INFO_BAD_STATE = (
 
 
 def get_state_info_test_data():
-    # pylint: disable=function-redefined, global-variable-undefined
-    # pylint: disable=invalid-name, unnecessary-lambda, redefined-outer-name
-    """Return a copy of Member test data.
-
-    This function uses closures, and redefines itself for efficency.  I am
-    also doing a bit of experimentation.
-    """
+    """Return a copy of Member test data."""
     stream = StringIO(STATE_INFO_GOOD_JSON)
-    data = JSONParser().parse(stream)
-    global get_member_test_data
-    get_member_test_data = lambda: data.copy()
-    return data
+    return JSONParser().parse(stream)
 
 
 @pytest.mark.parametrize(
@@ -210,5 +129,81 @@ def test_hello():
     """Foo the blah."""
     data = get_state_info_test_data()
     serializer = StateInfoSerializer(data=data)
-    # pytest.set_trace()
     assert serializer.is_valid(), serializer.errors
+
+
+# -----------------------------------------------------------------------------
+# AnalyticsEventSerializer
+# -----------------------------------------------------------------------------
+_ANALYTICSEVENT_KEY_COMBINATIONS = (
+    ('member',),
+    ('device',),
+    ('state_info',),
+    ('member', 'state_info'),
+    ('member', 'device'),
+    ('device', 'state_info'),
+    ('member', 'device', 'state_info'))
+
+
+@pytest.mark.parametrize(
+    'missing', _ANALYTICSEVENT_KEY_COMBINATIONS)
+def test_analyticseventserializer_has_missing_values(missing):
+    # pylint: disable=no-value-for-parameter, no-member, unexpected-keyword-arg
+    """Confirm not vaild on missing required fields.
+
+    Making sure that missing required fields mark the serializer object as
+    invalid, and that they are listed in serializer.errors.
+    """
+    data = {'member': get_member_test_data(),
+            'device': get_device_test_data(),
+            'state_info': get_state_info_test_data()}
+    for key in missing:
+        del data[key]
+    serializer = AnalyticsEventSerializer(data=data)
+    assert not serializer.is_valid()
+    for there in data.keys():
+        assert there not in serializer.errors.keys()
+
+
+@pytest.mark.parametrize(
+    'nones', _ANALYTICSEVENT_KEY_COMBINATIONS)
+def test_analyticseventserializer_has_none_values(nones):
+    # pylint: disable=no-value-for-parameter, no-member, unexpected-keyword-arg
+    """Confirm not vaild on required fields set to None.
+
+    In this case we are making sure that required fields with `None` values
+    results in an invalid state.  We also make sure that the the
+    serializer.errors property contains a list of the None valued keys.
+    """
+    data = {'member': get_member_test_data(),
+            'device': get_device_test_data(),
+            'state_info': get_state_info_test_data()}
+    for key in nones:
+        data[key] = None
+    serializer = AnalyticsEventSerializer(data=data)
+    assert not serializer.is_valid()
+    # excpected bad keys == actual bad keys
+    assert set(nones) == set(serializer.errors.keys()), serializer.errors
+
+
+@pytest.mark.parametrize(
+    'empties', _ANALYTICSEVENT_KEY_COMBINATIONS)
+def test_analyticseventserializer_has_bad_values(empties):
+    # pylint: disable=no-value-for-parameter, no-member, unexpected-keyword-arg
+    """Confirm that nested serializers are validated.
+
+    Cheating a bit by feeding in empty data (empty dict {}) into into the
+    fields being tested.  We confirm that serializer.errors flags the
+    appropriate bad flieds, as well as that the individual nested serialization
+    errors are sending back more than one error.
+    """
+    data = {'member': get_member_test_data(),
+            'device': get_device_test_data(),
+            'state_info': get_state_info_test_data()}
+    for key in empties:
+        data[key] = {}
+    serializer = AnalyticsEventSerializer(data=data)
+    assert not serializer.is_valid()
+    assert set(empties) == set(serializer.errors.keys())
+    for key in empties:
+        assert len(serializer.errors[key][0].keys()) > 1
