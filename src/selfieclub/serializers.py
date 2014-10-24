@@ -2,7 +2,8 @@
 
 from __future__ import absolute_import
 from . import dtos
-from bimcore.validators import IntegerValidator, DecimalValidator
+from bimcore.validators import IntegerValidator, DecimalValidator, \
+    ExactLengthValidator
 from bimcore.validators.analytics.device import *  # noqa pylint: disable=wildcard-import, unused-wildcard-import
 from bimcore.validators.member import validate_cohort_date
 from bimcore.validators.member import validate_cohort_week
@@ -215,7 +216,7 @@ class StateInfoSerializer(serializers.Serializer):
             validate_not_white_space_padded,
             RegexValidator(
                 regex=r'^[A-Z0-9_\-]{4,32}$',
-                message='Must be in the form of \'^[A-Z0-9_-]{8,32}$',
+                message=r'Must be in the form of \'^[A-Z0-9_\-]{4,32}$\'',
                 code='invalid_state_info_state')]
     }
 
@@ -223,6 +224,48 @@ class StateInfoSerializer(serializers.Serializer):
     screen_previous = serializers.CharField(**(_common_config.copy()))
     action_current = serializers.CharField(**(_common_config.copy()))
     action_previous = serializers.CharField(**(_common_config.copy()))
+
+
+class ApplicationSerializer(serializers.Serializer):
+    # pylint: disable=too-few-public-methods, star-args
+
+    """Used to track actions and screen states."""
+
+    _common_config = {
+        'required': True,
+        'max_length': 32,
+        'min_length': 4,
+        'validators': [
+            validate_not_white_space_padded,
+            RegexValidator(
+                regex=r'^[a-z0-9_\-\.]{4,32}$',
+                message=r'Must be in the form of \'^[a-z0-9_\-\.]{4,32}$\'',
+                code='invalid_version_string')]
+    }
+
+    client_version = serializers.CharField(**(_common_config.copy()))
+    service_selfieclub_version \
+        = serializers.CharField(**(_common_config.copy()))
+    service_bimanalytics_version \
+        = serializers.CharField(**(_common_config.copy()))
+    service_volley_version = serializers.CharField(
+        validators=[
+            ExactLengthValidator(6),
+            validate_not_white_space_padded,
+            RegexValidator(
+                regex=r'^sc[0-9]{4}$',
+                message=r'Must be in the form of \'^sc[0-9]{4}$\'',
+                code='invalid_version_string')])
+    service_env = serializers.CharField(
+        required=True,
+        max_length=6,
+        min_length=4,
+        validators=[
+            validate_not_white_space_padded,
+            RegexValidator(
+                regex=r'^(devint|prod)$',
+                message=r'Must be in the form of \'^(devint|prod)\'',
+                code='invalid_version_string')])
 
 
 class AnalyticsEventSerializer(serializers.Serializer):
