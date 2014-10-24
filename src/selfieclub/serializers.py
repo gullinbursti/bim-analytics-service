@@ -12,7 +12,8 @@ from bimcore.validators.time import validate_utc_offset, validate_utc_iso8601
 from bimcore.validators import validate_not_white_space_padded, \
     validate_not_none, validate_guid, validate_locale_code
 from django.core.exceptions import ValidationError
-from django.core.validators import MinLengthValidator, MaxLengthValidator
+from django.core.validators import MinLengthValidator, MaxLengthValidator, \
+    RegexValidator
 from rest_framework import serializers
 
 
@@ -199,6 +200,29 @@ class DeviceSerializer(serializers.Serializer):
         (MaxLengthValidator(2048))(attrs[source])
         validate_not_white_space_padded(attrs[source])
         return attrs
+
+
+class MemberEventSerializer(serializers.Serializer):
+    # pylint: disable=too-few-public-methods, star-args
+
+    """Used to track actions and screen stated."""
+
+    _common_config = {
+        'required': True,
+        'max_length': 32,
+        'min_length': 4,
+        'validators': [
+            validate_not_white_space_padded,
+            RegexValidator(
+                regex=r'^[A-Z0-9_\-]{4,32}$',
+                message='Must be in the form of \'^[A-Z0-9_-]{8,32}$',
+                code='invalid_member_event_states')]
+    }
+
+    screen_current = serializers.CharField(**(_common_config.copy()))
+    screen_previous = serializers.CharField(**(_common_config.copy()))
+    action_current = serializers.CharField(**(_common_config.copy()))
+    action_previous = serializers.CharField(**(_common_config.copy()))
 
 
 class AnalyticsEventSerializer(serializers.Serializer):
