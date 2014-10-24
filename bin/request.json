@@ -24,9 +24,16 @@
     "user_agent": "Apple-iPhone5C2/1001.525"
   },
   "state_info": {
-    "cohort_date": "2014-10-05",
-    "cohort_week": "2014-32",
-    "name": "member_name",
-    "id": 92837492
+    "screen_current": "CLUB_EVENTS_VIEW_01",
+    "screen_previous": "HOME_SCREEN",
+    "action_current": "SEARCH",
+    "action_previous": "OPEN"
+  },
+  "application": {
+    "client_version": "1.27.3",
+    "service_env": "prod",
+    "service_volley_version": "sc0007",
+    "service_selfieclub_version": "2.79.93",
+    "service_bimanalytics_version": "0.13.4"
   }
 }
