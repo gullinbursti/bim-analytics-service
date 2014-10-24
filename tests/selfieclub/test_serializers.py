@@ -202,10 +202,18 @@ _ANALYTICSEVENT_KEY_COMBINATIONS = (
     ('member',),
     ('device',),
     ('state_info',),
+    ('application',),
     ('member', 'state_info'),
     ('member', 'device'),
     ('device', 'state_info'),
-    ('member', 'device', 'state_info'))
+    ('member', 'device', 'state_info'),
+    ('application', 'member',),
+    ('application', 'device',),
+    ('application', 'state_info',),
+    ('application', 'member', 'state_info'),
+    ('application', 'member', 'device'),
+    ('application', 'device', 'state_info'),
+    ('application', 'member', 'device', 'state_info'))
 
 
 @pytest.mark.parametrize(
@@ -218,6 +226,7 @@ def test_analyticseventserializer_has_missing_values(missing):
     invalid, and that they are listed in serializer.errors.
     """
     data = {'member': get_member_test_data(),
+            'application': get_application_test_data(),
             'device': get_device_test_data(),
             'state_info': get_state_info_test_data()}
     for key in missing:
@@ -239,6 +248,7 @@ def test_analyticseventserializer_has_none_values(nones):
     serializer.errors property contains a list of the None valued keys.
     """
     data = {'member': get_member_test_data(),
+            'application': get_application_test_data(),
             'device': get_device_test_data(),
             'state_info': get_state_info_test_data()}
     for key in nones:
@@ -261,6 +271,7 @@ def test_analyticseventserializer_has_bad_values(empties):
     errors are sending back more than one error.
     """
     data = {'member': get_member_test_data(),
+            'application': get_application_test_data(),
             'device': get_device_test_data(),
             'state_info': get_state_info_test_data()}
     for key in empties:
