@@ -6,7 +6,7 @@ from io import StringIO
 from mock import patch
 from rest_framework.parsers import JSONParser
 from selfieclub.serializers import MemberSerializer, \
-    AnalyticsEventSerializer, MemberEventSerializer
+    AnalyticsEventSerializer, StateInfoSerializer
 import pytest
 from tests.selfieclub.test_serializers_device import get_device_test_data
 
@@ -144,9 +144,9 @@ def test_analyticseventserializer_has_bad_values(data):
 
 
 # -----------------------------------------------------------------------------
-# MemberEventSerializer
+# StateInfoSerializer
 # -----------------------------------------------------------------------------
-MEMBER_EVENT_GOOD_JSON = u"""
+STATE_INFO_GOOD_JSON = u"""
 {
     "screen_current": "CLUB_EVENTS_VIEW_01",
     "screen_previous": "HOME_SCREEN",
@@ -155,7 +155,7 @@ MEMBER_EVENT_GOOD_JSON = u"""
 }
 """
 
-MEMBER_EVENT_BAD_STATE = (
+STATE_INFO_BAD_STATE = (
     None,
     '',
     'X' * 3,
@@ -168,7 +168,7 @@ MEMBER_EVENT_BAD_STATE = (
 )
 
 
-def get_member_event_test_data():
+def get_state_info_test_data():
     # pylint: disable=function-redefined, global-variable-undefined
     # pylint: disable=invalid-name, unnecessary-lambda, redefined-outer-name
     """Return a copy of Member test data.
@@ -176,7 +176,7 @@ def get_member_event_test_data():
     This function uses closures, and redefines itself for efficency.  I am
     also doing a bit of experimentation.
     """
-    stream = StringIO(MEMBER_EVENT_GOOD_JSON)
+    stream = StringIO(STATE_INFO_GOOD_JSON)
     data = JSONParser().parse(stream)
     global get_member_test_data
     get_member_test_data = lambda: data.copy()
@@ -185,11 +185,11 @@ def get_member_event_test_data():
 
 @pytest.mark.parametrize(
     ('field', 'value'),
-    [('screen_current', bad) for bad in MEMBER_EVENT_BAD_STATE]
-    + [('screen_previous', bad) for bad in MEMBER_EVENT_BAD_STATE]
-    + [('action_current', bad) for bad in MEMBER_EVENT_BAD_STATE]
-    + [('action_previous', bad) for bad in MEMBER_EVENT_BAD_STATE])
-def test_member_event_fields_with_bad_data(field, value):
+    [('screen_current', bad) for bad in STATE_INFO_BAD_STATE]
+    + [('screen_previous', bad) for bad in STATE_INFO_BAD_STATE]
+    + [('action_current', bad) for bad in STATE_INFO_BAD_STATE]
+    + [('action_previous', bad) for bad in STATE_INFO_BAD_STATE])
+def test_state_info_fields_with_bad_data(field, value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
     """Test a given field with a bad value.
@@ -197,9 +197,9 @@ def test_member_event_fields_with_bad_data(field, value):
     Makes sure that validation fails, and that reason is provided in
     serializer.errors.
     """
-    data = get_member_event_test_data()
+    data = get_state_info_test_data()
     data[field] = value
-    serializer = MemberEventSerializer(data=data)
+    serializer = StateInfoSerializer(data=data)
     assert not serializer.is_valid(), serializer.errors
     assert not set([field]) - set(serializer.errors.keys())
 
@@ -208,7 +208,7 @@ def test_hello():
     # pylint: disable=unexpected-keyword-arg, no-value-for-parameter
     # pylint: disable=no-member
     """Foo the blah."""
-    data = get_member_event_test_data()
-    serializer = MemberEventSerializer(data=data)
+    data = get_state_info_test_data()
+    serializer = StateInfoSerializer(data=data)
     # pytest.set_trace()
     assert serializer.is_valid(), serializer.errors

@@ -202,10 +202,10 @@ class DeviceSerializer(serializers.Serializer):
         return attrs
 
 
-class MemberEventSerializer(serializers.Serializer):
+class StateInfoSerializer(serializers.Serializer):
     # pylint: disable=too-few-public-methods, star-args
 
-    """Used to track actions and screen stated."""
+    """Used to track actions and screen states."""
 
     _common_config = {
         'required': True,
@@ -216,7 +216,7 @@ class MemberEventSerializer(serializers.Serializer):
             RegexValidator(
                 regex=r'^[A-Z0-9_\-]{4,32}$',
                 message='Must be in the form of \'^[A-Z0-9_-]{8,32}$',
-                code='invalid_member_event_states')]
+                code='invalid_state_info_state')]
     }
 
     screen_current = serializers.CharField(**(_common_config.copy()))
