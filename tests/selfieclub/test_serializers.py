@@ -19,7 +19,7 @@ MEMBER_GOOD_JSON = u"""
    "cohort_date" : "2014-10-05",
    "cohort_week" : "2014-32",
    "name" : "member_name",
-   "id" : 92837492
+   "identifier" : 92837492
 }
 """
 
@@ -38,7 +38,7 @@ class TestMemberDeserialization(object):
 
     @pytest.mark.parametrize(
         ('field_name', 'validator'),
-        [('id', 'selfieclub.serializers.validate_member_id'),
+        [('identifier', 'selfieclub.serializers.validate_member_id'),
          ('name', 'selfieclub.serializers.validate_member_name'),
          ('cohort_date', 'selfieclub.serializers.validate_cohort_date'),
          ('cohort_week', 'selfieclub.serializers.validate_cohort_week')])
@@ -69,7 +69,7 @@ class TestMemberDeserialization(object):
         assert member_test_data['cohort_date'] == member_dto.cohort_date
         assert member_test_data['cohort_week'] == member_dto.cohort_week
         assert member_test_data['name'] == member_dto.name
-        assert member_test_data['id'] == member_dto.identifier
+        assert member_test_data['identifier'] == member_dto.identifier
 
 
 # -----------------------------------------------------------------------------

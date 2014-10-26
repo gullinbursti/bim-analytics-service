@@ -23,7 +23,7 @@ class MemberSerializer(serializers.Serializer):
 
     """Member information serializer."""
 
-    id = serializers.IntegerField(required=True)  # noqa pylint: disable=invalid-name
+    identifier = serializers.IntegerField(required=True)  # noqa pylint: disable=invalid-name
     name = serializers.CharField(required=True)
     cohort_week = serializers.CharField(required=True)
     cohort_date = serializers.CharField(required=True)
@@ -32,12 +32,12 @@ class MemberSerializer(serializers.Serializer):
         """Given a dictionary of deserialized field values."""
         assert instance is None, 'Cannot be used to update, only to create'
         return dtos.MemberDto(
-            identifier=attrs['id'],
+            identifier=attrs['identifier'],
             name=attrs['name'],
             cohort_date=attrs['cohort_date'],
             cohort_week=attrs['cohort_week'])
 
-    def validate_id(self, attrs, source):
+    def validate_identifier(self, attrs, source):
         """member ID validation call."""
         validate_member_id(attrs[source])
         return attrs
