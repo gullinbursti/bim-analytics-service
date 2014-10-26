@@ -72,12 +72,12 @@ class DeviceSerializer(serializers.Serializer):
     locale = serializers.CharField(required=True)
     orientation = serializers.CharField(required=True)
     orientation_deg = serializers.IntegerField(required=True)
-    os = serializers.CharField(required=True)  # pylint: disable=invalid-name
-    os_version = serializers.CharField(required=True)
+    platform = serializers.CharField(required=True)
+    platform_version = serializers.CharField(required=True)
     resolution_x = serializers.IntegerField(required=True)
     resolution_y = serializers.IntegerField(required=True)
     time = serializers.CharField(required=True)
-    tz = serializers.CharField(required=True)  # pylint: disable=invalid-name
+    timezone = serializers.CharField(required=True)
     user_agent = serializers.CharField(required=True)
 
     def restore_object(self, attrs, instance=None):
@@ -93,16 +93,16 @@ class DeviceSerializer(serializers.Serializer):
             locale=attrs['locale'],
             orientation=attrs['orientation'],
             orientation_deg=attrs['orientation_deg'],
-            os_=attrs['os'],
-            os_version=attrs['os_version'],
+            platform=attrs['platform'],
+            platform_version=attrs['platform_version'],
             resolution_x=attrs['resolution_x'],
             resolution_y=attrs['resolution_y'],
             time=attrs['time'],
-            tz_=attrs['tz'],
+            timezone=attrs['timezone'],
             user_agent=attrs['user_agent'])
 
-    def validate_os(self, attrs, source):
-        """Validate os."""
+    def validate_platform(self, attrs, source):
+        """Validate platform."""
         if len(attrs[source]) > 8:
             raise ValidationError('String length greater than 8.')
         if attrs[source] not in ('ios', 'android'):
@@ -110,8 +110,8 @@ class DeviceSerializer(serializers.Serializer):
                 'Valid value is either \'ios\' or \'android\'.')
         return attrs
 
-    def validate_os_version(self, attrs, source):
-        """Validate os_version."""
+    def validate_platform_version(self, attrs, source):
+        """Validate platform_version."""
         validate_not_none(attrs[source])
         (MaxLengthValidator(32))(attrs[source])
         validate_not_white_space_padded(attrs[source])
@@ -164,7 +164,7 @@ class DeviceSerializer(serializers.Serializer):
         validate_utc_iso8601(attrs[source])
         return attrs
 
-    def validate_tz(self, attrs, source):
+    def validate_timezone(self, attrs, source):
         """Validate UTC offset for timezone."""
         validate_utc_offset(attrs[source])
         return attrs

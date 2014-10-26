@@ -38,7 +38,7 @@ class TestDeviceDeserialization(object):
         [('adid', 'selfieclub.serializers.validate_guid'),
          ('locale', 'selfieclub.serializers.validate_locale_code'),
          ('time', 'selfieclub.serializers.validate_utc_iso8601'),
-         ('tz', 'selfieclub.serializers.validate_utc_offset')])
+         ('timezone', 'selfieclub.serializers.validate_utc_offset')])
     def test_calls_validator(self, field_name, validator):
         """Make sure that the proper validator has been called.
 
@@ -64,15 +64,16 @@ class TestDeviceDeserialization(object):
     + [('resolution_x', bad) for bad in RESOLUTION_VALUES_BAD]
     + [('pixel_density', bad) for bad in (None, '', 0, -1, 1024*10+1,
                                           'some_string')]
-    + [('os', bad) for bad in (None, '', '\t', '\niOS', 'Ios', ' ios',
-                               ' ios  ', 'a'*9, 'Android', 'android ')]
+    + [('platform', bad)
+       for bad in (None, '', '\t', '\niOS', 'Ios', ' ios', ' ios  ', 'a'*9,
+                   'Android', 'android ')]
     + [('hardware_make', bad) for bad in (None, '', 'y', 'z'*65, 'Apple   ',
                                           ' Apple', ' Samsung ')]
     + [('hardware_model', bad) for bad in (None, '', 'y', 't'*65,
                                            '\niPhone 5 ', ' iPhone 5',
                                            '\tiPhone 5', 'a')]
-    + [('os_version', bad) for bad in (None, '', 'g', '   8.0.2', '8.0.2\n',
-                                       'r'*33)]
+    + [('platform_version', bad) for bad in (None, '', 'g', '   8.0.2',
+                                             '8.0.2\n', 'r'*33)]
     + [('orientation', bad) for bad in (None, '', '\nportrait', 'portrait\r',
                                         'portrait   ', 'Landscape')]
     + [('orientation_deg', bad) for bad in (None, '', -1, 91, 'some_string')])
@@ -104,8 +105,8 @@ def test_device_fields_with_bad_data(field, value):
                                            'Galaxy S', 'Galaxy S II',
                                            'Galaxy S5', 'GT-I9300', 'gH',
                                            'r'*64)]
-    + [('os_version', bad) for bad in ('8.0.2', '7.1.1', '7.1', '2.3.7',
-                                       '4.4.4', '1.1', 'b'*32)]
+    + [('platform_version', bad) for bad in ('8.0.2', '7.1.1', '7.1', '2.3.7',
+                                             '4.4.4', '1.1', 'b'*32)]
     + [('orientation', bad) for bad in ('landscape', 'portrait')]
     + [('orientation_deg', bad) for bad in (0, 90, 180, 270)]
     + [('user_agent', bad) for bad in
@@ -134,13 +135,13 @@ def test_device_fields_with_good_data(field, value):
 def test_validate_os_with_good_values(value):
     # pylint: disable=redefined-outer-name, unexpected-keyword-arg
     # pylint: disable=no-value-for-parameter, no-member
-    """Test os field."""
+    """Test platform field."""
     device_test_data = get_device_test_data()
-    device_test_data['os'] = value
+    device_test_data['platform'] = value
     serializer = DeviceSerializer(data=device_test_data)
     assert serializer.is_valid(), serializer.errors
     assert not serializer.errors
-    assert value == serializer.object.os_
+    assert value == serializer.object.platform
 
 
 DEVICE_GOOD_JSON = u"""
@@ -154,12 +155,12 @@ DEVICE_GOOD_JSON = u"""
     "locale": "en_us",
     "orientation": "portrait",
     "orientation_deg": 0,
-    "os": "ios",
-    "os_version": "7.1.2",
+    "platform": "ios",
+    "platform_version": "7.1.2",
     "resolution_x": 768,
     "resolution_y": 1024,
     "time": "2014-10-13T15:09:10Z",
-    "tz": "UTC-08:00",
+    "timezone": "UTC-08:00",
     "user_agent": "Apple-iPhone5C2/1001.525"
 }
 """

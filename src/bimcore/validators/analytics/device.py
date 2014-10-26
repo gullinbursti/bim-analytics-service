@@ -11,22 +11,22 @@ __all__ = ('validate_device_adid',
            'validate_device_locale',
            'validate_device_orientation',
            'validate_device_orientation_deg',
-           'validate_device_os',
-           'validate_device_os_version',
+           'validate_device_platform',
+           'validate_device_platform_version',
            'validate_device_time',
            'validate_device_token',
-           'validate_device_tz',
+           'validate_device_timezone',
            'validate_device_user_agent')
 
 
-def validate_device_os(value):
+def validate_device_platform(value):
     """TODO - Validates os."""
     # pylint: disable=unused-argument
     pass
 
 
-def validate_device_os_version(value):
-    """TODO - Validates os_version."""
+def validate_device_platform_version(value):
+    """TODO - Validates platform_version."""
     # pylint: disable=unused-argument
     pass
 
@@ -73,7 +73,7 @@ def validate_device_time(value):
     pass
 
 
-def validate_device_tz(value):
+def validate_device_timezone(value):
     """TODO - Validates tz."""
     # pylint: disable=unused-argument
     pass

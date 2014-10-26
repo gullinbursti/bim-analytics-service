@@ -15,12 +15,12 @@
     "locale": "en_us",
     "orientation": "portrait",
     "orientation_deg": 0,
-    "os": "ios",
-    "os_version": "7.1.2",
+    "platform": "ios",
+    "platform_version": "7.1.2",
     "resolution_x": 768,
     "resolution_y": 1024,
     "time": "2014-10-13T15:09:10Z",
-    "tz": "UTC-08:00",
+    "timezone": "UTC-08:00",
     "user_agent": "Apple-iPhone5C2/1001.525"
   },
   "state_info": {
