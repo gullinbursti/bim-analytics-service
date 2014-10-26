@@ -6,9 +6,26 @@ from __future__ import absolute_import
 
 import os
 
+# -----------------------------------------------------------------------------
+# Django
+SECRET_KEY =      # TODO - fill in value
+
+# -----------------------------------------------------------------------------
+# Debugging
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-TEMPLATE_DEBUG = True
+DEBUG = True           # TODO- set to False in production
+TEMPLATE_DEBUG = True  # TODO- set to False in production
+
+# -----------------------------------------------------------------------------
+# Debugging
+# Set WSGI_APPLICATION to None when in dev.
+#
+# `manage.py runserver` tries to load the module specified by WSGI_APPLICATION
+# which is problematic.  The project's wsgi.py starts up the virtualenv, and
+# performs other actions specific to production.  It will likely cause
+# problems, and in
+# WSGI_APPLICATION = None  # TODO - Uncomment in dev
+
 
 # -----------------------------------------------------------------------------
 # Celery settings
@@ -17,10 +34,6 @@ rabbitmq_passwd = # TODO - fill in value
 rabbitmq_host =   # TODO - fill in value
 BROKER_URL = "amqp://{}:{}@{}//".format(
     rabbitmq_user, rabbitmq_passwd, rabbitmq_host)
-
-# -----------------------------------------------------------------------------
-# Django
-SECRET_KEY =      # TODO - fill in value
 
 # -----------------------------------------------------------------------------
 # Application specific
