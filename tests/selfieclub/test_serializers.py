@@ -69,7 +69,7 @@ class TestMemberDeserialization(object):
         assert member_test_data['cohort_date'] == member_dto.cohort_date
         assert member_test_data['cohort_week'] == member_dto.cohort_week
         assert member_test_data['name'] == member_dto.name
-        assert member_test_data['id'] == member_dto.id_
+        assert member_test_data['id'] == member_dto.identifier
 
 
 # -----------------------------------------------------------------------------

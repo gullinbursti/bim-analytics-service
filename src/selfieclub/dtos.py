@@ -6,9 +6,9 @@ class MemberDto(object):
 
     """Member Data Transfer Object (DTO)."""
 
-    def __init__(self, id_, name, cohort_date, cohort_week):
+    def __init__(self, identifier, name, cohort_date, cohort_week):
         """Create an instance of MemberDto."""
-        self.id_ = id_
+        self.identifier = identifier
         self.name = name
         self.cohort_date = cohort_date
         self.cohort_week = cohort_week

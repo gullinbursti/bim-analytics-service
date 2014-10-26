@@ -32,7 +32,7 @@ class MemberSerializer(serializers.Serializer):
         """Given a dictionary of deserialized field values."""
         assert instance is None, 'Cannot be used to update, only to create'
         return dtos.MemberDto(
-            id_=attrs['id'],
+            identifier=attrs['id'],
             name=attrs['name'],
             cohort_date=attrs['cohort_date'],
             cohort_week=attrs['cohort_week'])
