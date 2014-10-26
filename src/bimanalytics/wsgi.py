@@ -22,5 +22,7 @@ def activate_virtualenv(virtualenv_dir):
         compile(open(activate_this).read(), activate_this, 'exec'),
         dict(__file__=activate_this))
 
+
+activate_virtualenv(VIRTUALENV_DIR)
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()  # noqa - required by WSGI.  pylint: disable=invalid-name
