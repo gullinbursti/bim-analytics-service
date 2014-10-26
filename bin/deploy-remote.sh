@@ -8,7 +8,6 @@ set -o pipefail
 set -o nounset
 
 export DJANGO_SETTINGS_MODULE='bimanalytics.settings'
-export BIMANALYTICS_CONFIG_DIR='/etc/bimanalytics'
 
 build_id="$1"
 package_path="$2"

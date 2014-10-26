@@ -8,19 +8,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
+from bimcore.conf import get_local_conf_dir
 import os
 import sys
 
 
-# Fail fast, fail often, and fail by design!!!  Make it clear that
-# BIMANALYTICS_CONFIG_DIR must be set.
-CONFIG_DIR = os.environ.get('BIMANALYTICS_CONFIG_DIR', None)
-if not CONFIG_DIR:
-    raise Exception('BIMANALYTICS_CONFIG_DIR not set!')
-elif not os.path.isdir(CONFIG_DIR):
-    raise Exception('BIMANALYTICS_CONFIG_DIR set to a directory that does '
-                    'not exist: {}'.format(CONFIG_DIR))
-elif CONFIG_DIR not in sys.path:
+CONFIG_DIR = get_local_conf_dir(
+    env_var='BIMANALYTICS_CONFIG_DIR', prod_conf_dir='/etc/bimanalytics')
+if CONFIG_DIR not in sys.path:
     # pylint: disable=superfluous-parens
     print('Appending \'{}\' to sys.path.'.format(CONFIG_DIR))
     sys.path.append(CONFIG_DIR)
@@ -64,7 +59,7 @@ REST_FRAMEWORK = {
 }
 
 ROOT_URLCONF = 'bimanalytics.urls'
-WSGI_APPLICATION = 'bimanalytics.wsgi.APPLICATION'
+WSGI_APPLICATION = 'bimanalytics.wsgi.application'
 
 
 # Database
