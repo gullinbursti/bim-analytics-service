@@ -12,26 +12,36 @@ class TestEventView(object):
 
     """Testing the EventView."""
 
-    @patch('selfieclub.views.AnalyticsEventSerializer')
-    def test_posting_a_good_event(self, mock_serializer):
+    def test_posting_a_good_event(self):
+        # TODO: Checng this so we pass in actual JSON!  Cut out all the mocks!
         """Just check to make sure that the serializer is being used.
 
         The idea is that the serializer is being tested somewhere else.  As
         long as the view uses the serializer correctly, and returns the result
         we are OK.
         """
-        # ** Arrange **
-        mock_instance = mock_serializer.return_value
-        mock_instance.is_valid.return_value = True
-        factory = APIRequestFactory()
-        request = factory.post('/selfieclub/', {'title': 'new idea'})
-        view = EventView.as_view()
-        # ** Act **
-        response = view(request)
-        # ** Assert **
-        mock_instance.is_valid.assert_called()
-        assert status.HTTP_200_OK == response.status_code
-        assert not response.data
+        with patch('selfieclub.views.AnalyticsEventSerializer') \
+                as serializer_class,\
+                patch('selfieclub.views.JSONRenderer.render') as render, \
+                patch('selfieclub.tasks.record_event.delay') as task:
+
+            # ** Arrange **
+            serializer = serializer_class.return_value
+            serializer.is_valid.return_value = True
+
+            factory = APIRequestFactory()
+            request = factory.post('/selfieclub/', {'title': 'new idea'})
+            view = EventView.as_view()
+
+            # ** Act **
+            response = view(request)
+
+            # ** Assert **
+            assert status.HTTP_200_OK == response.status_code
+            assert not response.data
+            serializer.is_valid.assert_called()
+            render.assert_called_with(serializer.data)
+            task.assert_called_with(render.return_value)
 
     @patch('selfieclub.views.AnalyticsEventSerializer')
     def test_posting_a_bad_event(self, mock_serializer):
