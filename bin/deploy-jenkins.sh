@@ -11,7 +11,8 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-build_id="$1"
+remote_host="$1"
+build_id="$2"
 dist_dir="dist-$build_id"
 
 echo ""
@@ -25,7 +26,6 @@ package_path=$(ls -1 $dist_dir/bimanalytics-*.tar.gz | sort -u | tail -1)
 package_name=$(basename "$package_path")
 
 ssh_proxy='ProxyCommand ssh bim-deploy@bastion.selfieclubapp.com nc -q0 %h %p 2> /dev/null'
-remote_host='bim-deploy@api00.devint.selfieclubapp.com'
 remote_tmp_dir="/opt/built-in-menlo/tmp/bimanalytics/$build_id"
 
 echo ""
