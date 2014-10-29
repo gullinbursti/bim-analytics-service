@@ -39,7 +39,7 @@ case "$service_type" in
         sudo /usr/sbin/service apache2 restart
         ;;
     'celery')
-        sudo /usr/sbin/service celeryd restart
+        sudo /usr/sbin/service celeryd-bimanalytics restart
         ;;
     *)
         echo "ERROR - Unknown service_type: $service_type"
