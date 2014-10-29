@@ -10,8 +10,9 @@ set -o nounset
 export DJANGO_SETTINGS_MODULE='bimanalytics.settings'
 export BIMANALYTICS_CONFIG_DIR='/home/bim-deploy/.bim-build-conf'
 
-build_id="$1"
-package_path="$2"
+service_type="$1"
+build_id="$2"
+package_path="$3"
 link_path='/opt/built-in-menlo/bimanalytics'
 
 
@@ -32,4 +33,17 @@ virtualenv --python=python2.7 "$install_dir"
 "$pip_cmd" install "$package_path"
 (cd "$install_dir" && "$django_admin_cmd" collectstatic --noinput)
 ln -fsnv "$install_dir" "$link_path"
-sudo /usr/sbin/service apache2 restart
+
+case "$service_type" in
+    'apache')
+        sudo /usr/sbin/service apache2 restart
+        ;;
+    'celery')
+        sudo /usr/sbin/service celeryd restart
+        ;;
+    *)
+        echo "ERROR - Unknown service_type: $service_type"
+        exit 1
+        ;;
+esac
+

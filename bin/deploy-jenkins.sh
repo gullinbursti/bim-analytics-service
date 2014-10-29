@@ -11,8 +11,9 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-remote_host="$1"
-build_id="$2"
+service_type="$1"
+remote_host="$2"
+build_id="$3"
 dist_dir="dist-$build_id"
 
 echo ""
@@ -43,5 +44,5 @@ ssh -o "$ssh_proxy" "$remote_host" <<EOC
     set -o xtrace
     set -o errexit
     cd "$remote_tmp_dir"
-    ./deploy-remote.sh "$build_id" "$package_name"
+    ./deploy-remote.sh "$service_type" "$build_id" "$package_name"
 EOC
