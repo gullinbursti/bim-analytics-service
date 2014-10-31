@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import
 from rest_framework import status
-from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from selfieclub import tasks
@@ -31,8 +30,7 @@ class EventView(APIView):
         LOGGER.error('This is from the django view \'error\'...')
         LOGGER.critical('This is from the django view \'critical\'...')
         LOGGER.info('Sending: %s', request_serializer)
-        json = JSONRenderer().render(request_serializer.data)
-        tasks.record_event.delay(json)
+        tasks.record_event.delay(request_serializer.data)
 
         rest_response = Response(None, status=status.HTTP_200_OK)
         return rest_response

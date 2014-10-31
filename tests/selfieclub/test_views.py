@@ -22,7 +22,6 @@ class TestEventView(object):
         """
         with patch('selfieclub.views.AnalyticsEventSerializer') \
                 as serializer_class,\
-                patch('selfieclub.views.JSONRenderer.render') as render, \
                 patch('selfieclub.tasks.record_event.delay') as task:
 
             # ** Arrange **
@@ -40,8 +39,7 @@ class TestEventView(object):
             assert status.HTTP_200_OK == response.status_code
             assert not response.data
             serializer.is_valid.assert_called()
-            render.assert_called_with(serializer.data)
-            task.assert_called_with(render.return_value)
+            task.assert_called_with(serializer.data)
 
     @patch('selfieclub.views.AnalyticsEventSerializer')
     def test_posting_a_bad_event(self, mock_serializer):

@@ -58,7 +58,7 @@ class TestMemberDeserialization(object):
             patched.assert_called_with(member_test_data[field_name])
             assert not set([field_name]) - set(serializer.errors.keys())
 
-# TODO: Test various known good values
+    # TODO: Test various known good values
     def test_loading_good_json_data_is_valid(self):
         """Test that loading good data works."""
         member_test_data = get_member_test_data()

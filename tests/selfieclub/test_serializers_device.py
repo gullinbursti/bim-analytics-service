@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import
 from django.core.exceptions import ValidationError
-from decimal import Decimal
 from io import StringIO
 from mock import patch
 from rest_framework.parsers import JSONParser
@@ -12,8 +11,8 @@ import pytest
 
 RESOLUTION_VALUES_GOOD = (20, 1024*10)
 RESOLUTION_VALUES_BAD = (None, '', 0, -100, 19, 1024*10+1, 'some_string')
-PERCENTAGE_VALUES_GOOD = (Decimal(0), Decimal(100), Decimal(0.00000),
-                          Decimal(100.00000), Decimal(34.0980))
+PERCENTAGE_VALUES_GOOD = (float(0), float(100), float(0.00000),
+                          float(100.00000), float(34.0980))
 PERCENTAGE_VALUES_BAD = (None, '', -1, -0.00001, 100.000001, 'hello')
 
 

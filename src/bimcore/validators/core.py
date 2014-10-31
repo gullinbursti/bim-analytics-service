@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import
 
-__all__ = ('DecimalValidator',
+__all__ = ('FloatValidator',
            'IntegerValidator',
            'ExactLengthValidator',
            'validate_guid',
@@ -17,7 +17,6 @@ from django.core.validators import BaseValidator, RegexValidator, \
     MaxLengthValidator
 from django.utils.translation import ugettext_lazy
 import sys
-from decimal import Decimal
 
 
 def validate_not_none(value):
@@ -110,7 +109,7 @@ class IntegerValidator(object):
                                                            self.maximum))
 
 
-class DecimalValidator(object):
+class FloatValidator(object):
     # pylint: disable=too-few-public-methods
 
     """Validate decimal and make sure that it is within range."""
@@ -124,13 +123,13 @@ class DecimalValidator(object):
         """Verify that decimal is within range."""
         validate_not_string(value)
         try:
-            Decimal(value)
+            float(value)
         except ValueError:
             raise ValidationError('Decimaling point number expected.')
 
         if self.maximum is not None and value > self.maximum:
             raise ValidationError(
-                'Decimal must be between less than {}'.format(self.maximum))
+                'Float must be between less than {}'.format(self.maximum))
         if self.minimum is not None and value < self.minimum:
             raise ValidationError(
-                'Decimal must be between greater than {}'.format(self.minimum))
+                'Float must be between greater than {}'.format(self.minimum))

@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import
 from . import dtos
-from bimcore.validators import IntegerValidator, DecimalValidator, \
+from bimcore.validators import IntegerValidator, FloatValidator, \
     ExactLengthValidator
 from bimcore.validators.analytics.device import *  # noqa pylint: disable=wildcard-import, unused-wildcard-import
 from bimcore.validators.member import validate_cohort_date
@@ -64,8 +64,8 @@ class DeviceSerializer(serializers.Serializer):
     """Device information validators."""
 
     adid = serializers.CharField(required=True)
-    battery_per = serializers.DecimalField(required=True)
-    cpu = serializers.DecimalField(required=True)
+    battery_per = serializers.FloatField(required=True)
+    cpu = serializers.FloatField(required=True)
     pixel_density = serializers.IntegerField(required=True)
     hardware_make = serializers.CharField(required=True)
     hardware_model = serializers.CharField(required=True)
@@ -171,12 +171,12 @@ class DeviceSerializer(serializers.Serializer):
 
     def validate_cpu(self, attrs, source):
         """Validate cpu."""
-        (DecimalValidator(minimum=0, maximum=100))(attrs[source])
+        (FloatValidator(minimum=0, maximum=100))(attrs[source])
         return attrs
 
     def validate_battery_per(self, attrs, source):
         """Validate battery_per."""
-        (DecimalValidator(minimum=0, maximum=100))(attrs[source])
+        (FloatValidator(minimum=0, maximum=100))(attrs[source])
         return attrs
 
     def validate_orientation(self, attrs, source):
