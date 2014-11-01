@@ -7,8 +7,8 @@ from mock import patch
 from rest_framework.parsers import JSONParser
 from selfieclub.serializers import MemberSerializer, \
     AnalyticsEventSerializer, StateInfoSerializer, ApplicationSerializer
-import pytest
 from tests.selfieclub.test_serializers_device import get_device_test_data
+import pytest
 
 
 # -----------------------------------------------------------------------------

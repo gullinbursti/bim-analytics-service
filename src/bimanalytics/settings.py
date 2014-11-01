@@ -93,6 +93,12 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
+# -----------------------------------------------------------------------------
+# Keen.io event collections
+KEEN_IO_EVENT_COLLECTIONS = {
+    'client_event': r'Basic Client Event - DEVINT'
+}
+
 # Things that need to be in 'local_settings':
 #     - SECRET_KEY
 #     - AWS_CREDENTIALS

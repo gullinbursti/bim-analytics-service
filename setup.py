@@ -22,4 +22,5 @@ setup(
         'celery>=3.1.13',
         'djangorestframework>=2.3.14',
         'drf-compound-fields>=0.2.1',
+        'keen>=0.3.3',
         'requests>=2.4.1'])
