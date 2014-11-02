@@ -57,7 +57,8 @@ def validate_guid(value):
     (RegexValidator(
         regex=regex,
         message='GUID must be all caps, and in the form of: '
-                'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'))(value)
+                'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX',
+        code='invalid_guid'))(value)
 
 
 def validate_locale_code(value):

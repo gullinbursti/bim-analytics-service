@@ -6,7 +6,8 @@ from io import StringIO
 from mock import patch
 from rest_framework.parsers import JSONParser
 from selfieclub.serializers import MemberSerializer, \
-    AnalyticsEventSerializer, StateInfoSerializer, ApplicationSerializer
+    AnalyticsEventSerializer, StateInfoSerializer, ApplicationSerializer, \
+    SessionSerializer
 from tests.selfieclub.test_serializers_device import get_device_test_data
 import pytest
 
@@ -195,6 +196,36 @@ def test_application_fields_with_good_data():
     """Test ApplicationSerializer with good data, our base line.."""
     data = get_application_test_data()
     serializer = ApplicationSerializer(data=data)
+    assert serializer.is_valid(), serializer.errors
+
+
+# -----------------------------------------------------------------------------
+# SessionSerializer
+# -----------------------------------------------------------------------------
+SESSION_GOOD_JSON = u"""
+{
+    "identifier": "7068C396-1D49-4AEE-9304-6D4410E56E39",
+    "identifier_last": "7D61B5ED-E750-4D5F-9D06-8FC787121128",
+    "event_identifier": "92FBC6F2-AD5F-4FD1-B838-0D8DBABB6263",
+    "session_gap": 852877,
+    "duration": 10789,
+    "idle": 398,
+    "count": 23,
+    "entry_point": "entry_point"
+}
+"""
+
+
+def get_session_test_data():
+    """Return a copy of Member test data."""
+    stream = StringIO(SESSION_GOOD_JSON)
+    return JSONParser().parse(stream)
+
+
+def test_session_serializer_with_good_data():
+    # pylint: disable=no-value-for-parameter, no-member, unexpected-keyword-arg
+    """Test SessionSerializer with good data."""
+    serializer = SessionSerializer(data=get_session_test_data())
     assert serializer.is_valid(), serializer.errors
 
 

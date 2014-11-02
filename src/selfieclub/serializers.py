@@ -268,6 +268,55 @@ class ApplicationSerializer(serializers.Serializer):
                 code='invalid_version_string')])
 
 
+class SessionSerializer(serializers.Serializer):
+    # pylint: disable=too-few-public-methods
+
+    """Session terminates after 25 minutes of inactivity."""
+
+    # Session ID in the form of a GUID, or UUID.
+    identifier \
+        = serializers.CharField(required=True, validators=[validate_guid])
+
+    # ID of previous session.
+    identifier_last \
+        = serializers.CharField(required=True, validators=[validate_guid])
+
+    # GUID, or UUID of this event.  Each session is composed of multiple
+    # events.  An 'event_id' would let us trace it from the device, all the way
+    # to the reporting system.
+    event_identifier \
+        = serializers.CharField(required=True, validators=[validate_guid])
+
+    # Seconds since last session.
+    session_gap = serializers.IntegerField(
+        required=True, validators=[IntegerValidator(minimum=0)])
+
+    # How long in current session, in seconds.
+    duration = serializers.IntegerField(
+        required=True, validators=[IntegerValidator(minimum=0)])
+
+    # Time since last event.
+    idle = serializers.IntegerField(
+        required=True, validators=[IntegerValidator(minimum=0)])
+
+    # Total number of events in current session.
+    count = serializers.IntegerField(
+        required=True, validators=[IntegerValidator(minimum=0)])
+
+    # How the member entered current session, could be things like: push
+    # notification, direct, link, etc.
+    _entry_point_regex = r'^(entry_point|TODO)$'
+    entry_point = serializers.CharField(
+        required=True,
+        validators=[
+            validate_not_white_space_padded,
+            RegexValidator(
+                regex=_entry_point_regex,
+                message='Must be in the form of \'{}\'.'.format(
+                    _entry_point_regex),
+                code='invalid_version_string')])
+
+
 class AnalyticsEventSerializer(serializers.Serializer):
     # pylint: disable=too-few-public-methods, no-value-for-parameter
     # pylint: disable=unexpected-keyword-arg, no-self-use
