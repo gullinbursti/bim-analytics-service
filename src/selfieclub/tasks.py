@@ -32,10 +32,7 @@ def record_event(self, event):
         LOGGER.debug('Event to record details: %s', serializer.data)
         keen.add_event(settings.KEEN_IO_EVENT_COLLECTIONS['client_event'],
                        serializer.data)
-        print '\nBEFORE'
     except KeenApiError as exception:
-        print '\nEXCEPTION'
         LOGGER.exception('Failed to record event to upstream.',
                          exc_info=exception)
-        # import pdb; pdb.set_trace()
         raise self.retry(exc=exception)
