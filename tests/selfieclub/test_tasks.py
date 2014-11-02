@@ -59,5 +59,6 @@ def test_record_event_rety_on_keen_error():
         tasks.record_event.delay({'faking': 'it'})
         # Assert
         keen.add_event.assert_called()
+        print 'HERE {}'.format(retry.mock_calls)
         retry.assert_called()
         # retry.assert_called_with(exc=exception)
