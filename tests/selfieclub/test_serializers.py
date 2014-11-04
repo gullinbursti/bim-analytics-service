@@ -250,7 +250,7 @@ def test_session_serializer_with_good_data():
                          '', ' ', None]])
 def test_session_serializer_with_bad_values(field, value):
     # pylint: disable=no-value-for-parameter, unexpected-keyword-arg, no-member
-    """Fooing on the bar."""
+    """Test with a variety of bad values."""
     data = get_session_test_data()
     data[field] = value
     serializer = SessionSerializer(data=data)
@@ -273,7 +273,7 @@ def test_session_serializer_with_bad_values(field, value):
        for good_value in ['home', 'push_notification']])
 def test_session_serializer_with_good_values(field, value):
     # pylint: disable=no-value-for-parameter, unexpected-keyword-arg, no-member
-    """Fooing on the bar."""
+    """Test with a variety or good values."""
     data = get_session_test_data()
     data[field] = value
     serializer = SessionSerializer(data=data)
@@ -284,7 +284,7 @@ def test_session_serializer_with_good_values(field, value):
 @pytest.mark.parametrize('field', get_session_test_data().keys())
 def test_session_serializer_with_missing_fields(field):
     # pylint: disable=no-value-for-parameter, unexpected-keyword-arg, no-member
-    """Fooing on the bar."""
+    """Test with missing fields."""
     data = get_session_test_data()
     del data[field]
     serializer = SessionSerializer(data=data)
@@ -300,17 +300,31 @@ _ANALYTICSEVENT_KEY_COMBINATIONS = (
     ('device',),
     ('state_info',),
     ('application',),
-    ('member', 'state_info'),
-    ('member', 'device'),
-    ('device', 'state_info'),
-    ('member', 'device', 'state_info'),
-    ('application', 'member',),
-    ('application', 'device',),
-    ('application', 'state_info',),
-    ('application', 'member', 'state_info'),
-    ('application', 'member', 'device'),
-    ('application', 'device', 'state_info'),
-    ('application', 'member', 'device', 'state_info'))
+    ('session',),
+    ('session', 'member',),
+    ('session', 'device',),
+    ('session', 'state_info',),
+    ('session', 'application',),
+    ('session', 'member', 'state_info'),
+    ('session', 'member', 'device'),
+    ('session', 'device', 'state_info'),
+    ('session', 'member', 'device', 'state_info'),
+    ('session', 'application', 'member',),
+    ('session', 'application', 'device',),
+    ('session', 'application', 'state_info',),
+    ('session', 'application', 'member', 'state_info'),
+    ('session', 'application', 'member', 'device'),
+    ('session', 'application', 'device', 'state_info'),
+    ('session', 'application', 'member', 'device', 'state_info'))
+
+
+def get_analytics_event_data():
+    """Provide a analytics event test data."""
+    return {'member': get_member_test_data(),
+            'application': get_application_test_data(),
+            'device': get_device_test_data(),
+            'state_info': get_state_info_test_data(),
+            'session': get_session_test_data()}
 
 
 @pytest.mark.parametrize(
@@ -322,10 +336,7 @@ def test_analyticseventserializer_has_missing_values(missing):
     Making sure that missing required fields mark the serializer object as
     invalid, and that they are listed in serializer.errors.
     """
-    data = {'member': get_member_test_data(),
-            'application': get_application_test_data(),
-            'device': get_device_test_data(),
-            'state_info': get_state_info_test_data()}
+    data = get_analytics_event_data()
     for key in missing:
         del data[key]
     serializer = AnalyticsEventSerializer(data=data)
@@ -344,10 +355,7 @@ def test_analyticseventserializer_has_none_values(nones):
     results in an invalid state.  We also make sure that the the
     serializer.errors property contains a list of the None valued keys.
     """
-    data = {'member': get_member_test_data(),
-            'application': get_application_test_data(),
-            'device': get_device_test_data(),
-            'state_info': get_state_info_test_data()}
+    data = get_analytics_event_data()
     for key in nones:
         data[key] = None
     serializer = AnalyticsEventSerializer(data=data)
@@ -367,10 +375,7 @@ def test_analyticseventserializer_has_bad_values(empties):
     appropriate bad flieds, as well as that the individual nested serialization
     errors are sending back more than one error.
     """
-    data = {'member': get_member_test_data(),
-            'application': get_application_test_data(),
-            'device': get_device_test_data(),
-            'state_info': get_state_info_test_data()}
+    data = get_analytics_event_data()
     for key in empties:
         data[key] = {}
     serializer = AnalyticsEventSerializer(data=data)

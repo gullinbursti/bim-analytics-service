@@ -327,6 +327,7 @@ class AnalyticsEventSerializer(serializers.Serializer):
     member = MemberSerializer(required=True)
     state_info = StateInfoSerializer(required=True)
     application = ApplicationSerializer(required=True)
+    session = SessionSerializer(required=True)
 
     def validate_device(self, attrs, source):
         """Validate device."""
@@ -345,5 +346,10 @@ class AnalyticsEventSerializer(serializers.Serializer):
 
     def validate_application(self, attrs, source):
         """Validate application."""
+        validate_not_none(attrs[source])
+        return attrs
+
+    def validate_session(self, attrs, source):
+        """Validate session."""
         validate_not_none(attrs[source])
         return attrs

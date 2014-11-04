@@ -35,5 +35,15 @@
     "service_volley_version": "sc0007",
     "service_selfieclub_version": "2.79.93",
     "service_bimanalytics_version": "0.13.4"
+  },
+  "session": {
+    "identifier": "7068C396-1D49-4AEE-9304-6D4410E56E39",
+    "identifier_last": "7D61B5ED-E750-4D5F-9D06-8FC787121128",
+    "event_identifier": "92FBC6F2-AD5F-4FD1-B838-0D8DBABB6263",
+    "session_gap": 852877,
+    "duration": 10789,
+    "idle": 398,
+    "count": 23,
+    "entry_point": "push_notification"
   }
 }
