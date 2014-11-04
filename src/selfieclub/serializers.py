@@ -305,7 +305,7 @@ class SessionSerializer(serializers.Serializer):
 
     # How the member entered current session, could be things like: push
     # notification, direct, link, etc.
-    _entry_point_regex = r'^(entry_point|TODO)$'
+    _entry_point_regex = r'^(home|push_notification)$'
     entry_point = serializers.CharField(
         required=True,
         validators=[

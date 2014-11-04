@@ -9,7 +9,9 @@ from selfieclub.serializers import MemberSerializer, \
     AnalyticsEventSerializer, StateInfoSerializer, ApplicationSerializer, \
     SessionSerializer
 from tests.selfieclub.test_serializers_device import get_device_test_data
+from bimtest.values import GuidTestValues
 import pytest
+import sys
 
 
 # -----------------------------------------------------------------------------
@@ -211,9 +213,12 @@ SESSION_GOOD_JSON = u"""
     "duration": 10789,
     "idle": 398,
     "count": 23,
-    "entry_point": "entry_point"
+    "entry_point": "push_notification"
 }
 """
+
+_BAD_POSITIVE_INTEGERS = ('', None, ' ', False, True, -1)
+_GOOD_POSITIVE_INTEGERS = (0, sys.maxsize)
 
 
 def get_session_test_data():
@@ -227,6 +232,64 @@ def test_session_serializer_with_good_data():
     """Test SessionSerializer with good data."""
     serializer = SessionSerializer(data=get_session_test_data())
     assert serializer.is_valid(), serializer.errors
+
+
+@pytest.mark.parametrize(
+    ('field', 'value'),
+    [('identifier', bad_value) for bad_value in GuidTestValues().bad_values]
+    + [('identifier_last', bad_value)
+       for bad_value in GuidTestValues().bad_values]
+    + [('event_identifier', bad_value)
+       for bad_value in GuidTestValues().bad_values]
+    + [('session_gap', bad_value) for bad_value in _BAD_POSITIVE_INTEGERS]
+    + [('duration', bad_value) for bad_value in _BAD_POSITIVE_INTEGERS]
+    + [('idle', bad_value) for bad_value in _BAD_POSITIVE_INTEGERS]
+    + [('count', bad_value) for bad_value in _BAD_POSITIVE_INTEGERS]
+    + [('entry_point', bad_value)
+       for bad_value in ['home ', '\nhome', 'home\n', 'home\t', 'hOme'
+                         '', ' ', None]])
+def test_session_serializer_with_bad_values(field, value):
+    # pylint: disable=no-value-for-parameter, unexpected-keyword-arg, no-member
+    """Fooing on the bar."""
+    data = get_session_test_data()
+    data[field] = value
+    serializer = SessionSerializer(data=data)
+    assert not serializer.is_valid()
+    assert not set([field]) - set(serializer.errors.keys())
+
+
+@pytest.mark.parametrize(
+    ('field', 'value'),
+    [('identifier', good_value) for good_value in GuidTestValues().good_values]
+    + [('identifier_last', good_value)
+       for good_value in GuidTestValues().good_values]
+    + [('event_identifier', good_value)
+       for good_value in GuidTestValues().good_values]
+    + [('session_gap', good_value) for good_value in _GOOD_POSITIVE_INTEGERS]
+    + [('duration', good_value) for good_value in _GOOD_POSITIVE_INTEGERS]
+    + [('idle', good_value) for good_value in _GOOD_POSITIVE_INTEGERS]
+    + [('count', good_value) for good_value in _GOOD_POSITIVE_INTEGERS]
+    + [('entry_point', good_value)
+       for good_value in ['home', 'push_notification']])
+def test_session_serializer_with_good_values(field, value):
+    # pylint: disable=no-value-for-parameter, unexpected-keyword-arg, no-member
+    """Fooing on the bar."""
+    data = get_session_test_data()
+    data[field] = value
+    serializer = SessionSerializer(data=data)
+    assert serializer.is_valid(), serializer.errors
+    assert not serializer.errors.keys()
+
+
+@pytest.mark.parametrize('field', get_session_test_data().keys())
+def test_session_serializer_with_missing_fields(field):
+    # pylint: disable=no-value-for-parameter, unexpected-keyword-arg, no-member
+    """Fooing on the bar."""
+    data = get_session_test_data()
+    del data[field]
+    serializer = SessionSerializer(data=data)
+    assert not serializer.is_valid()
+    assert not set([field]) - set(serializer.errors.keys())
 
 
 # -----------------------------------------------------------------------------
