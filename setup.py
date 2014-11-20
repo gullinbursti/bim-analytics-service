@@ -23,4 +23,5 @@ setup(
         'djangorestframework>=2.3.14',
         'drf-compound-fields>=0.2.1',
         'keen>=0.3.3',
+        'pyrabbit>=1.1.0',
         'requests>=2.4.1'])
